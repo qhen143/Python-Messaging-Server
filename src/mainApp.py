@@ -42,22 +42,26 @@ class MainApp(object):
         Page = "Welcome! This is a test website for COMPSYS302!<br/>"
         
         try:
+            #Page = '<form action="/signin">'
             Page += "Hello " + cherrypy.session['username'] + "!<br/>"
 	    Page += "This is bad practice " + cherrypy.session['password'] + "!<br/>"
             Page += "Here is some bonus text because you've logged in!"
-	    Page += '<input type="submit" value="signout"/></form>'
+	    Page += "Click here to <a href='signout'>signoutaaa</a>."
+	    #Page += '<input type="submit" value="signout"/></form>'
         except KeyError: #There is no username
             
             Page += "Click here to <a href='login'>login</a>." #'login' is the link. Can be replaced with any function or link
         return Page
         
     @cherrypy.expose
-    def login(self):
+    def login():
         Page = '<form action="/signin" method="post" enctype="multipart/form-data">' #signin the fucntion that the button does
         Page += 'Username: <input type="text" name="username"/><br/>'
         Page += 'Password: <input type="text" name="password"/>'
         Page += '<input type="submit" value="Loginxd"/></form>'
         return Page
+
+
     
     @cherrypy.expose    
     def sum(self, a=0, b=0): #All inputs are strings by default
