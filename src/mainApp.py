@@ -18,7 +18,8 @@ import cherrypy
 import urllib
 import hashlib
 import socket
-
+import sqlite3
+import json
 
 class MainApp(object):
 
@@ -46,7 +47,9 @@ class MainApp(object):
             Page += "Hello " + cherrypy.session['username'] + "!<br/>"
 	    Page += "This is bad practice " + cherrypy.session['password'] + "!<br/>"
             Page += "Here is some bonus text because you've logged in!"
-	    Page += "Click here to <a href='signout'>signoutaaa</a>."
+	    #Page += "Click here to <a href='signout'>signoutaaa</a>."
+            Page += self.logout()
+            Page += self.list()
 	    #Page += '<input type="submit" value="signout"/></form>'
         except KeyError: #There is no username
             
@@ -54,19 +57,76 @@ class MainApp(object):
         return Page
         
     @cherrypy.expose
-    def login():
+    def login(self):
         Page = '<form action="/signin" method="post" enctype="multipart/form-data">' #signin the fucntion that the button does
         Page += 'Username: <input type="text" name="username"/><br/>'
         Page += 'Password: <input type="text" name="password"/>'
         Page += '<input type="submit" value="Loginxd"/></form>'
         return Page
 
+    @cherrypy.expose
+    def logout(self):
+        Page = '<form action="/signout">'
+        Page += '<input type="submit" value="signout"/></form>'
+        return Page
+
+    @cherrypy.expose
+    def list(self):
+        Page = '<form action="/getList">'
+        Page += '<input type="submit" value="getList"/></form>'
+        return Page
 
     
     @cherrypy.expose    
     def sum(self, a=0, b=0): #All inputs are strings by default
         output = int(a)+int(b)
         return str(output)
+
+    @cherrypy.expose
+    def getList(self):
+        username = cherrypy.session.get('username')
+	#password = cherrypy.session.get('password')
+	print username
+	#print password
+        #hash1 = hashlib.sha256(password+username).hexdigest()
+        hash1 = hashlib.sha256(cherrypy.session.get('password')+username).hexdigest()
+        test = urllib.urlopen("http://cs302.pythonanywhere.com/getList?username="+username+"&password="+hash1+"&enc=0&json=1")
+	output = test.read().decode('utf-8')
+        json1 = json.loads(output)
+        print(isinstance(json1, dict))
+        print(json1)
+        db = sqlite3.connect('db/clientData')
+        print("read")
+        cursor = db.cursor()
+        cursor.execute('''DELETE FROM online''')
+        #cursor.execute('''CREATE TABLE users(id INTEGER PRIMARY KEY, username TEXT,
+        #               ip TEXT, location INTEGER, lastlogin TEXT, port INTEGER)''')
+        #db.commit()
+        #cursor.execute('''INSERT INTO online(ID, USERNAME, IP, LOCATION, LASTLOGIN, PORT)
+        #          VALUES(?,?,?,?,?,?)''', (4, "abc","123", 2, "1s1s1", 1004))
+        columns = ['username', 'ip', 'location', 'lastLogin', 'port']
+        for index, data in json1.iteritems():
+            keys = (index,) + tuple(data[c] for c in columns)
+            cursor.execute('''INSERT INTO online(ID, USERNAME, IP, LOCATION, LASTLOGIN, PORT)
+                  VALUES(?,?,?,?,?,?)''', keys)
+        #for key in json1.iteritems():
+            
+        #    for key2 in key:
+	#        print(key2)
+        #        print("\n")
+
+            #cursor.execute('''INSERT INTO online(ID, USERNAME, IP, LOCATION, LASTLOGIN, PORT)
+            #      VALUES(?,?,?,?,?,?)''', (4, "abc","123", 2, "1s1s1", 1004))
+        #cursor.execute('''INSERT INTO online(ID, USERNAME, IP, LOCATION, LASTLOGIN, PORT)
+        #         VALUES(3,"asa", "gdg",22,"asaas",3)''')
+        db.commit()
+        #if test == 0:
+        Page = output
+        #else:
+        #    Page = "not allowed"
+        db.close()
+        return Page
+#{"0": {"username": "hpat255", "ip": "115.188.149.214", "location": "2", "lastLogin": "1527417969", "port": "10001"}, "1": {"username": "acha932", "ip": "192.168.1.96", "location": "2", "lastLogin": "1527418005", "port": "8080"}, "2": {"username": "ccho416", "ip": "121.74.162.159", "location": "2", "lastLogin": "1527418022", "port": "10001"}, "3": {"username": "qhen143", "ip": "127.0.1.1", "location": "2", "lastLogin": "1527418183", "port": "10004"}}
         
     # LOGGING IN AND OUT
     @cherrypy.expose
