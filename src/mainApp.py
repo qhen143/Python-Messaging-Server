@@ -76,7 +76,18 @@ class MainApp(object):
         Page += '<input type="submit" value="getList"/></form>'
         return Page
 
+    @cherrypy.expose
+    def msg(self,sender, destination):
+        Page = '<form action="/receiveMessage?sender="'+sender+'"&destination="'+destination+'"&message=""&stamp="abc"" method = "post">'
+	Page += 'Message: <input type="text" name="message"/><br/>'
+        Page += '<input type="submit" value="send!"/></form>'
+        return Page
     
+    @cherrypy.expose
+    def receiveMessage(self, sender, destination, message, stamp, enc=0, hashing = 0, hash = "", decryptionKey = 0 , groupID = ""): 
+        print("hello")
+
+
     @cherrypy.expose    
     def sum(self, a=0, b=0): #All inputs are strings by default
         output = int(a)+int(b)
@@ -114,7 +125,7 @@ class MainApp(object):
         #display from database
         cursor.execute('''SELECT * FROM online ORDER BY ID ASC''')
         data = cursor.fetchall()
-        Page = "<table><tr>"
+        Page = "<table><tr><td>id</td>"
         for x in columns:
             Page += "<td>"+str(x)+"</td>"
         Page += "</tr>"
@@ -125,16 +136,13 @@ class MainApp(object):
                 print(index)
                 Page += "<td>"+str(index)+"</td>"
             Page += "</tr>"
-        #for key in json1.iteritems():
-            
-        #    for key2 in key:
-	#        print(key2)
-        #        print("\n")
+        Page += "</table>"
 
-            #cursor.execute('''INSERT INTO online(ID, USERNAME, IP, LOCATION, LASTLOGIN, PORT)
-            #      VALUES(?,?,?,?,?,?)''', (4, "abc","123", 2, "1s1s1", 1004))
-        #cursor.execute('''INSERT INTO online(ID, USERNAME, IP, LOCATION, LASTLOGIN, PORT)
-        #         VALUES(3,"asa", "gdg",22,"asaas",3)''')
+        #testing messaging table
+        Page += "<table><tr><td>" + columns[0] + "</td></tr>"
+        for row in data:
+            Page += "<tr><td><a href='msg?sender="+username +"&destination=" + row[1] + "'>" + row[1] + "</a></td></tr>"
+        Page += "</table>"
         
         db.commit()
         #if test == 0:
@@ -142,7 +150,7 @@ class MainApp(object):
         #else:
         #    Page = "not allowed"
         db.close()
-        return Page + "</tr>"
+        return Page
 #{"0": {"username": "hpat255", "ip": "115.188.149.214", "location": "2", "lastLogin": "1527417969", "port": "10001"}, "1": {"username": "acha932", "ip": "192.168.1.96", "location": "2", "lastLogin": "1527418005", "port": "8080"}, "2": {"username": "ccho416", "ip": "121.74.162.159", "location": "2", "lastLogin": "1527418022", "port": "10001"}, "3": {"username": "qhen143", "ip": "127.0.1.1", "location": "2", "lastLogin": "1527418183", "port": "10004"}}
         
     # LOGGING IN AND OUT
