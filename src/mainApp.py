@@ -105,10 +105,26 @@ class MainApp(object):
         #cursor.execute('''INSERT INTO online(ID, USERNAME, IP, LOCATION, LASTLOGIN, PORT)
         #          VALUES(?,?,?,?,?,?)''', (4, "abc","123", 2, "1s1s1", 1004))
         columns = ['username', 'ip', 'location', 'lastLogin', 'port']
+        #insert data into database
         for index, data in json1.iteritems():
             keys = (index,) + tuple(data[c] for c in columns)
             cursor.execute('''INSERT INTO online(ID, USERNAME, IP, LOCATION, LASTLOGIN, PORT)
                   VALUES(?,?,?,?,?,?)''', keys)
+        
+        #display from database
+        cursor.execute('''SELECT * FROM online ORDER BY ID ASC''')
+        data = cursor.fetchall()
+        Page = "<table><tr>"
+        for x in columns:
+            Page += "<td>"+str(x)+"</td>"
+        Page += "</tr>"
+        for row in data:
+            print(row)
+            Page += "<tr>"
+            for index in row:
+                print(index)
+                Page += "<td>"+str(index)+"</td>"
+            Page += "</tr>"
         #for key in json1.iteritems():
             
         #    for key2 in key:
@@ -119,13 +135,14 @@ class MainApp(object):
             #      VALUES(?,?,?,?,?,?)''', (4, "abc","123", 2, "1s1s1", 1004))
         #cursor.execute('''INSERT INTO online(ID, USERNAME, IP, LOCATION, LASTLOGIN, PORT)
         #         VALUES(3,"asa", "gdg",22,"asaas",3)''')
+        
         db.commit()
         #if test == 0:
-        Page = output
+        #Page = output
         #else:
         #    Page = "not allowed"
         db.close()
-        return Page
+        return Page + "</tr>"
 #{"0": {"username": "hpat255", "ip": "115.188.149.214", "location": "2", "lastLogin": "1527417969", "port": "10001"}, "1": {"username": "acha932", "ip": "192.168.1.96", "location": "2", "lastLogin": "1527418005", "port": "8080"}, "2": {"username": "ccho416", "ip": "121.74.162.159", "location": "2", "lastLogin": "1527418022", "port": "10001"}, "3": {"username": "qhen143", "ip": "127.0.1.1", "location": "2", "lastLogin": "1527418183", "port": "10004"}}
         
     # LOGGING IN AND OUT
