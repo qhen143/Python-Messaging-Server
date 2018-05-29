@@ -185,7 +185,12 @@ class MainApp(object):
         #test = urllib.urlopen("http://127.0.0.1:1234/sum?a=0&b=0")
 	#test = urllib.urlopen("http://localhost:10004/sum?a=0&b=0")
 	hash1 = hashlib.sha256(password+username).hexdigest()
-	ip = socket.gethostbyname(socket.gethostname())
+	#ip = socket.gethostbyname(socket.getfqdn())
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+        print(s.getsockname()[0])
+        s.close()
 	print ip
         test = urllib.urlopen("http://cs302.pythonanywhere.com/report?username=" + username+"&password="+ hash1+"&location=2&ip="+ip+"&port="+str(listen_port)+"&enc=0")
         #if (username.lower() == "andrew") and (password.lower() == "password"):
