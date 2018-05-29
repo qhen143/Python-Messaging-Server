@@ -78,15 +78,21 @@ class MainApp(object):
 
     @cherrypy.expose
     def msg(self,sender, destination):
-        Page = '<form action="/receiveMessage?sender="'+sender+'"&destination="'+destination+'"&message=""&stamp="abc"" method = "post">'
+        Page = '<form action=/sendMessage?sender='+sender+'&destination='+destination+'&message=420&stamp=abc method = "post">'
 	Page += 'Message: <input type="text" name="message"/><br/>'
         Page += '<input type="submit" value="send!"/></form>'
         return Page
     
     @cherrypy.expose
-    def receiveMessage(self, sender, destination, message, stamp, enc=0, hashing = 0, hash = "", decryptionKey = 0 , groupID = ""): 
-        print("hello")
+    def sendMessage(self, sender, destination, message, stamp, enc=0, hashing = 0, hash = "", decryptionKey = 0 , groupID = ""): #dont need all these params
+        cursor.execute('''SELECT ip, port FROM online where username = ? ''', (destiantion))
+        destinationData = cursor.fetchone()
+        error = urllib.urlopen(destinationData[0]+":"+destinationData[1]+"/receiveMessage?sender="+sender+"&destination="+destination+"&message="+message+"&stamp=4.20")
+        print("xd")
 
+    @cherrypy.expose
+    def sendMessage(self, sender, destination, message, stamp, enc=0, hashing = 0, hash = "", decryptionKey = 0 , groupID = ""):
+        print("asassafafafafafsaf")
 
     @cherrypy.expose    
     def sum(self, a=0, b=0): #All inputs are strings by default
