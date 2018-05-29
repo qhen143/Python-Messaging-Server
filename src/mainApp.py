@@ -94,18 +94,61 @@ class MainApp(object):
         url = "http://"+ str(destinationData[0]) +":"+ str(destinationData[1]) + "/receiveMessage"
         stamp = "1527573585"
         data = {'sender': sender, 'destination':destination, 'message': message, 'stamp': stamp}
+
+        param = []
+        for key in data:
+            param.append(data[key])
+        print(param)
+        param = tuple(reversed(param))
+
         data = json.dumps(data)
         #data = json.dumps([sender,destination, message, stamp ])
         request = urllib2.Request(url,data, {'Content-Type': 'application/json'})
+        print(request)
         error = urllib2.urlopen(request)
+        print(error.read())
         print(destinationData[0],destinationData[1])
         #error = urllib2.urlopen("http://"+destinationData[0]+":"+str(destinationData[1])+"/receiveMessage?sender="+str(sender)+"&destination="+str(destination)+"&message="+str(message)+"&stamp=1527561839")
         print(error.read())
+        cursor.execute('''INSERT INTO messages(sender, destination, message, timestamp)
+                 VALUES(?,?,?,?)''', param)
+        db.commit()
         db.close()
 
     @cherrypy.expose
-    def receiveMessage(self, sender, destination, message, stamp, enc=0, hashing = 0, hash = "", decryptionKey = 0 , groupID = ""):
-        print("asassafafafafafsaf")
+    @cherrypy.tools.json_in()
+    def receiveMessage(self):
+        #("asassafafafafafsaf")
+        data = cherrypy.request.json
+        print(data)
+        param = []
+        for key in data:
+            param.append(data[key])
+        print(param)
+        param = tuple(reversed(param))
+        print(param)
+        db = sqlite3.connect('db/clientData')
+        cursor = db.cursor()
+        cursor.execute('''INSERT INTO messages(sender, destination, message, timestamp)
+                 VALUES(?,?,?,?)''', param)
+        db.commit()
+        db.close()
+
+    #@cherrypy.expose
+    #@cherrypy.tools.json_in()
+    #def receiveMessage(self, sender, destination, message, stamp, enc=0, hashing = 0, hash = "", decryptionKey = 0 , groupID = ""):
+        #("asassafafafafafsaf")
+        #data = cherrypy.request.json
+        #print(data)
+        #db = sqlite3.connect('db/clientData')
+        #cursor = db.cursor()
+        #cursor.execute('''INSERT INTO messages(sender, destination, message, timestamp)
+        #          VALUES(?,?,?,?)''', (sender,destination, message, stamp))
+        #db.close()
+
+    @cherrypy.expose    
+    def ping(self, sender): #All inputs are strings by default
+        return 0
 
     @cherrypy.expose    
     def sum(self, a=0, b=0): #All inputs are strings by default
@@ -158,11 +201,11 @@ class MainApp(object):
         Page += "</table>"
 
         #testing messaging table
-        Page += "<table><tr><td>" + columns[0] + "</td></tr>"
+        Page += "<table><tr><td>" + columns[0] + "</td> <td> ping! </td> </tr>"
         for row in data:
-            Page += "<tr><td><a href='msg?sender="+username +"&destination=" + row[1] + "'>" + row[1] + "</a></td></tr>"
+            Page += "<tr><td><a href='msg?sender="+username +"&destination=" + row[1] + "'>" + row[1] + "</a></td> <td><a href='"+row[2]+":"+str(row[5])+"/ping?sender=qhen143'>ping</a></td></tr>"
         Page += "</table>"
-        
+        print("asass" + str(self.ping("qhen143")))
         db.commit()
         #if test == 0:
         #Page = output
