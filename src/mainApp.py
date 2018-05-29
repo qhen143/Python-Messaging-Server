@@ -16,6 +16,7 @@ listen_port = 10004
 
 import cherrypy
 import urllib
+import urllib2
 import hashlib
 import socket
 import sqlite3
@@ -78,20 +79,32 @@ class MainApp(object):
 
     @cherrypy.expose
     def msg(self,sender, destination):
-        Page = '<form action=/sendMessage?sender='+sender+'&destination='+destination+'&message=420&stamp=abc method = "post">'
-	Page += 'Message: <input type="text" name="message"/><br/>'
+        Page = '<form action=/sendMessage?sender='+sender+'&destination='+destination+'&stamp=abc method = "post">'
+	Page += 'Message: <input type="text" name="message" value = message/><br/>'
         Page += '<input type="submit" value="send!"/></form>'
         return Page
     
     @cherrypy.expose
     def sendMessage(self, sender, destination, message, stamp, enc=0, hashing = 0, hash = "", decryptionKey = 0 , groupID = ""): #dont need all these params
-        cursor.execute('''SELECT ip, port FROM online where username = ? ''', (destiantion))
+        db = sqlite3.connect('db/clientData')
+        cursor = db.cursor()
+        print(destination)
+        cursor.execute('''SELECT ip, port FROM online where username = ? ''', [destination])
         destinationData = cursor.fetchone()
-        error = urllib.urlopen(destinationData[0]+":"+destinationData[1]+"/receiveMessage?sender="+sender+"&destination="+destination+"&message="+message+"&stamp=4.20")
-        print("xd")
+        url = "http://"+ str(destinationData[0]) +":"+ str(destinationData[1]) + "/receiveMessage"
+        stamp = "1527573585"
+        data = {'sender': sender, 'destination':destination, 'message': message, 'stamp': stamp}
+        data = json.dumps(data)
+        #data = json.dumps([sender,destination, message, stamp ])
+        request = urllib2.Request(url,data, {'Content-Type': 'application/json'})
+        error = urllib2.urlopen(request)
+        print(destinationData[0],destinationData[1])
+        #error = urllib2.urlopen("http://"+destinationData[0]+":"+str(destinationData[1])+"/receiveMessage?sender="+str(sender)+"&destination="+str(destination)+"&message="+str(message)+"&stamp=1527561839")
+        print(error.read())
+        db.close()
 
     @cherrypy.expose
-    def sendMessage(self, sender, destination, message, stamp, enc=0, hashing = 0, hash = "", decryptionKey = 0 , groupID = ""):
+    def receiveMessage(self, sender, destination, message, stamp, enc=0, hashing = 0, hash = "", decryptionKey = 0 , groupID = ""):
         print("asassafafafafafsaf")
 
     @cherrypy.expose    
@@ -222,7 +235,7 @@ def runMainApp():
                            })
 
     print "========================="
-    print "University of Auckland"
+    print "University of Auckland "
     print "COMPSYS302 - Software Design Application"
     print "========================================"                       
     
