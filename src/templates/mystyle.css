@@ -1,0 +1,67 @@
+div.Header {
+  background-color: lightsteelblue;
+  padding: 2px;
+  text-align: center;
+}
+
+div.NavBar {
+	background-color: seashell;
+	overflow: hidden;
+}
+
+div.NavBar a {
+    float: left;
+    color: black;
+    text-align: center;
+    padding: 15px 20px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+div.NavBar a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+div.NavBar a.active {
+  background-color: Silver;
+  color: white;
+}
+
+div.Userlist {
+    width: 200px;
+    height: 500px;
+    overflow-y: auto;
+    float: right;
+}
+
+div.Userlist a {
+    background-color: #eee; /* Grey background color */
+    color: black; /* Black text color */
+    display: block; /* Make the links appear below each other */
+    padding: 5px; /* Add some padding */
+    text-decoration: none; /* Remove underline from links */
+}
+
+div.Userlist a:hover {
+    background-color: #ccc; /* Dark grey background on mouse-over */
+}
+
+div.Userlist a.active {
+    background-color: #4CAF50; /* Add a green color to the "active/current" link */
+    color: white;
+}
+
+div.Content {
+    margin-right:200px;
+}
+
+div.Userlist p4 {
+	padding: 50px;
+}
+
+body {
+  margin: 0;
+  font-size: 28px;
+}
+
