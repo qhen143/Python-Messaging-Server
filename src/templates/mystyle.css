@@ -1,6 +1,6 @@
 div.Header {
-  background-color: lightsteelblue;
-  padding: 2px;
+  background-color: steelblue;
+  padding: 20px;
   text-align: center;
 }
 
@@ -11,9 +11,9 @@ div.NavBar {
 
 div.NavBar a {
     float: left;
-    color: black;
+    color: slategray;
     text-align: center;
-    padding: 15px 20px;
+    padding: 15px 50px;
     text-decoration: none;
     font-size: 17px;
 }
@@ -24,12 +24,12 @@ div.NavBar a:hover {
 }
 
 div.NavBar a.active {
-  background-color: Silver;
+  background-color: lightsteelblue;
   color: white;
 }
 
 div.Userlist {
-    width: 200px;
+    width: 300px;
     height: 500px;
     overflow-y: auto;
     float: right;
@@ -37,7 +37,7 @@ div.Userlist {
 
 div.Userlist a {
     background-color: #eee; /* Grey background color */
-    color: black; /* Black text color */
+    color: slategray; /* Black text color */
     display: block; /* Make the links appear below each other */
     padding: 5px; /* Add some padding */
     text-decoration: none; /* Remove underline from links */
@@ -48,20 +48,31 @@ div.Userlist a:hover {
 }
 
 div.Userlist a.active {
-    background-color: #4CAF50; /* Add a green color to the "active/current" link */
+    background-color: lightsteelblue; /* Add a green color to the "active/current" link */
     color: white;
 }
 
-div.Content {
-    margin-right:200px;
-}
-
 div.Userlist p4 {
-	padding: 50px;
+	padding: 15px;
+	display:block;
+	background-color:steelblue;
+	color:white;
 }
 
+div.Content {
+    margin-right:300px;
+    margin-left:50px
+}
+
+
+
+div.Header p8 {
+	color:white;
+	
+}
 body {
   margin: 0;
   font-size: 28px;
+font-family: Arial, Helvetica, sans-serif;
 }
 
