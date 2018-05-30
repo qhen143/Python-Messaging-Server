@@ -22,6 +22,13 @@ import socket
 import sqlite3
 import json
 
+import os, os.path
+
+from jinja2 import Environment, FileSystemLoader
+
+file_loader = FileSystemLoader('templates')
+env = Environment(loader = file_loader)
+
 class MainApp(object):
 
     #CherryPy Configuration
@@ -59,10 +66,13 @@ class MainApp(object):
         
     @cherrypy.expose
     def login(self):
-        Page = '<form action="/signin" method="post" enctype="multipart/form-data">' #signin the fucntion that the button does
-        Page += 'Username: <input type="text" name="username"/><br/>'
-        Page += 'Password: <input type="text" name="password"/>'
-        Page += '<input type="submit" value="Loginxd"/></form>'
+
+	template = env.get_template('login.html')
+	Page = template.render()
+        #Page = '<form action="/signin" method="post" enctype="multipart/form-data">' #signin the fucntion that the button does
+        #Page += 'Username: <input type="text" name="username"/><br/>'
+        #Page += 'Password: <input type="text" name="password"/>'
+        #Page += '<input type="submit" value="Loginxd"/></form>'
         return Page
 
     @cherrypy.expose
@@ -102,13 +112,11 @@ class MainApp(object):
         param = tuple(reversed(param))
 
         data = json.dumps(data)
-        #data = json.dumps([sender,destination, message, stamp ])
         request = urllib2.Request(url,data, {'Content-Type': 'application/json'})
         print(request)
         error = urllib2.urlopen(request)
         print(error.read())
         print(destinationData[0],destinationData[1])
-        #error = urllib2.urlopen("http://"+destinationData[0]+":"+str(destinationData[1])+"/receiveMessage?sender="+str(sender)+"&destination="+str(destination)+"&message="+str(message)+"&stamp=1527561839")
         print(error.read())
         cursor.execute('''INSERT INTO messages(sender, destination, message, timestamp)
                  VALUES(?,?,?,?)''', param)
@@ -118,7 +126,6 @@ class MainApp(object):
     @cherrypy.expose
     @cherrypy.tools.json_in()
     def receiveMessage(self):
-        #("asassafafafafafsaf")
         data = cherrypy.request.json
         print(data)
         param = []
@@ -134,18 +141,6 @@ class MainApp(object):
         db.commit()
         db.close()
 
-    #@cherrypy.expose
-    #@cherrypy.tools.json_in()
-    #def receiveMessage(self, sender, destination, message, stamp, enc=0, hashing = 0, hash = "", decryptionKey = 0 , groupID = ""):
-        #("asassafafafafafsaf")
-        #data = cherrypy.request.json
-        #print(data)
-        #db = sqlite3.connect('db/clientData')
-        #cursor = db.cursor()
-        #cursor.execute('''INSERT INTO messages(sender, destination, message, timestamp)
-        #          VALUES(?,?,?,?)''', (sender,destination, message, stamp))
-        #db.close()
-
     @cherrypy.expose    
     def ping(self, sender): #All inputs are strings by default
         return 0
@@ -158,10 +153,6 @@ class MainApp(object):
     @cherrypy.expose
     def getList(self):
         username = cherrypy.session.get('username')
-	#password = cherrypy.session.get('password')
-	print username
-	#print password
-        #hash1 = hashlib.sha256(password+username).hexdigest()
         hash1 = hashlib.sha256(cherrypy.session.get('password')+username).hexdigest()
         test = urllib.urlopen("http://cs302.pythonanywhere.com/getList?username="+username+"&password="+hash1+"&enc=0&json=1")
 	output = test.read().decode('utf-8')
@@ -172,11 +163,7 @@ class MainApp(object):
         print("read")
         cursor = db.cursor()
         cursor.execute('''DELETE FROM online''')
-        #cursor.execute('''CREATE TABLE users(id INTEGER PRIMARY KEY, username TEXT,
-        #               ip TEXT, location INTEGER, lastlogin TEXT, port INTEGER)''')
-        #db.commit()
-        #cursor.execute('''INSERT INTO online(ID, USERNAME, IP, LOCATION, LASTLOGIN, PORT)
-        #          VALUES(?,?,?,?,?,?)''', (4, "abc","123", 2, "1s1s1", 1004))
+
         columns = ['username', 'ip', 'location', 'lastLogin', 'port']
         #insert data into database
         for index, data in json1.iteritems():
@@ -207,13 +194,8 @@ class MainApp(object):
         Page += "</table>"
         print("asass" + str(self.ping("qhen143")))
         db.commit()
-        #if test == 0:
-        #Page = output
-        #else:
-        #    Page = "not allowed"
         db.close()
         return Page
-#{"0": {"username": "hpat255", "ip": "115.188.149.214", "location": "2", "lastLogin": "1527417969", "port": "10001"}, "1": {"username": "acha932", "ip": "192.168.1.96", "location": "2", "lastLogin": "1527418005", "port": "8080"}, "2": {"username": "ccho416", "ip": "121.74.162.159", "location": "2", "lastLogin": "1527418022", "port": "10001"}, "3": {"username": "qhen143", "ip": "127.0.1.1", "location": "2", "lastLogin": "1527418183", "port": "10004"}}
         
     # LOGGING IN AND OUT
     @cherrypy.expose
@@ -242,23 +224,17 @@ class MainApp(object):
     def authoriseUserLogin(self, username, password):
         print username
         print password
-#hashpass = hashlib.
 #B3FCE8CFCA6465845E55964425D585E874818DC351037B88858C413CECAEDB19
-        #test = urllib.urlopen("http://127.0.0.1:1234/sum?a=0&b=0")
-	#test = urllib.urlopen("http://localhost:10004/sum?a=0&b=0")
 	hash1 = hashlib.sha256(password+username).hexdigest()
-	#ip = socket.gethostbyname(socket.getfqdn())
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(("8.8.8.8", 80))
-        ip = s.getsockname()[0]
-        print(s.getsockname()[0])
-        s.close()
+	#s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        #s.connect(("8.8.8.8", 80))
+        #ip = s.getsockname()[0]
+        #print(s.getsockname()[0])
+        #s.close()
+	ip = urllib2.urlopen('http://ip.42.pl/raw').read()
 	print ip
         test = urllib.urlopen("http://cs302.pythonanywhere.com/report?username=" + username+"&password="+ hash1+"&location=2&ip="+ip+"&port="+str(listen_port)+"&enc=0")
-        #if (username.lower() == "andrew") and (password.lower() == "password"):
-        #print test
 	output = test.read().decode('utf-8')
-	#print test.read().decode('utf-8')
 	print output
         print username
         if output[0] == str(0):
@@ -268,8 +244,18 @@ class MainApp(object):
             return 1
           
 def runMainApp():
+    conf = {
+        '/': {
+            'tools.sessions.on': True,
+            'tools.staticdir.root': os.path.abspath(os.getcwd())
+        },
+        '/static': {
+            'tools.staticdir.on': True,
+            'tools.staticdir.dir': './static'
+        }
+    }
     # Create an instance of MainApp and tell Cherrypy to send all requests under / to it. (ie all of them)
-    cherrypy.tree.mount(MainApp(), "/")
+    cherrypy.tree.mount(MainApp(), "/", conf)
 
     # Tell Cherrypy to listen for connections on the configured address and port.
     cherrypy.config.update({'server.socket_host': listen_ip,
