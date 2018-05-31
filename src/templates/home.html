@@ -1,9 +1,30 @@
 <!DOCTYPE html>
 <html>
-<link rel="stylesheet" type="text/css" href="mystyle.css">
+<link rel="stylesheet" type="text/css" href="static/mystyle.css">
+
 <head>
 </head>
 <body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="handlebars-v4.0.11.js"></script>
+<script>
+$.getJSON("https://10.103.137.36:10004/getOnline", function(data) {
+	var source   = document.getElementById("userlist").innerHTML;
+	var template = Handlebars.compile(source);
+	var context = {username: "My New Post", ip: "This is my first post!", publickey: "", location: , lastlogin, port};
+	var html    = template(context);
+});
+</script>
+
+<script>
+function dispMsgPg() {
+    document.getElementById("abc").innerHTML = "Paragraph changed.";
+}
+
+<script id="userlist" type="text/x-handlebars-template">
+    {{#each user}}
+    <a onclick="dispMsgPg("+{{user}}+)" href="javascript:void(0);"> {{user}}</a>
+</script>
 
 <div class="Header">
   <p8>Memes weed blaze it crips</p8>
@@ -17,7 +38,7 @@
 </div>
 
 
-<div class="Userlist">
+<div class="Userlist" onload = getList()>
   <p4> Contacts </p4>
   <a href="#" class="active">Home</a>
   <a href="#">Link 1</a>
@@ -43,9 +64,11 @@
   <a href="#">Link 4</a>
 </div>
 
+
+
 <div class="Content">
   <h3>Sticky Navigation Example</h3>
-  <p>The navbar will stick to the top when you reach its scroll position.</p>
+  <p>https://stackoverflow.com/questions/14175293/getjson-results-into-html </p>
   <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
   <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
   <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>

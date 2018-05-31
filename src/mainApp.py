@@ -67,13 +67,21 @@ class MainApp(object):
     @cherrypy.expose
     def login(self):
 
-	template = env.get_template('login.html')
-	Page = template.render()
+	#template = env.get_template('login.html')
+	#Page = template.render()
+
+	Page = open('templates/login.html')	
+
         #Page = '<form action="/signin" method="post" enctype="multipart/form-data">' #signin the fucntion that the button does
         #Page += 'Username: <input type="text" name="username"/><br/>'
         #Page += 'Password: <input type="text" name="password"/>'
         #Page += '<input type="submit" value="Loginxd"/></form>'
         return Page
+    
+    @cherrypy.expose
+    def home(self):
+        Page = open('templates/home.html')
+	return Page
 
     @cherrypy.expose
     def logout(self):
@@ -196,7 +204,19 @@ class MainApp(object):
         db.commit()
         db.close()
         return Page
+    
+    @cherrypy.expose
+    def retrieveOnline(self):
+        db = sqlite3.connect('db/clientData')
+        db.row_factory = sqlite3.Row
+        cursor = db.cursor()
+        cursor.execute('''SELECT * FROM online ORDER BY ID ASC''')
+        data = cursor.fetchall()
+        db.close()
+	print(data)
+        return data
         
+    
     # LOGGING IN AND OUT
     @cherrypy.expose
     def signin(self, username=None, password=None):
@@ -226,14 +246,18 @@ class MainApp(object):
         print password
 #B3FCE8CFCA6465845E55964425D585E874818DC351037B88858C413CECAEDB19
 	hash1 = hashlib.sha256(password+username).hexdigest()
+	
+	ip = socket.gethostbyname(socket.gethostname())
+	
 	#s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         #s.connect(("8.8.8.8", 80))
         #ip = s.getsockname()[0]
         #print(s.getsockname()[0])
         #s.close()
-	ip = urllib2.urlopen('http://ip.42.pl/raw').read()
+
+	#ip = urllib2.urlopen('http://ip.42.pl/raw').read()
 	print ip
-        test = urllib.urlopen("http://cs302.pythonanywhere.com/report?username=" + username+"&password="+ hash1+"&location=2&ip="+ip+"&port="+str(listen_port)+"&enc=0")
+        test = urllib.urlopen("http://cs302.pythonanywhere.com/report?username=" + username+"&password="+ hash1+"&location=0&ip="+ip+"&port="+str(listen_port)+"&enc=0")
 	output = test.read().decode('utf-8')
 	print output
         print username
