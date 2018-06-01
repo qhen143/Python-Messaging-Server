@@ -201,8 +201,25 @@ class MainApp(object):
         print("asass" + str(self.ping("qhen143")))
         db.commit()
         db.close()
-        return Page
-        
+       
+        return Page 
+
+    @cherrypy.expose
+    @cherrypy.tools.json_out() 
+    def onlineJSON(self):
+	db = sqlite3.connect('db/clientData')
+        db.row_factory = sqlite3.Row
+        cursor = db.cursor()
+	cursor.execute("SELECT username, lastlogin FROM online ORDER BY username ASC")
+        data = cursor.fetchall()
+	#data = dict(zip(data.keys(), data))
+	data = dict(data)
+	#data = json.dumps(data)
+    	db.close()
+	print(type(data))
+	print data
+        return data
+   
     # LOGGING IN AND OUT
     @cherrypy.expose
     def signin(self, username=None, password=None):
@@ -212,6 +229,9 @@ class MainApp(object):
             cherrypy.session['username'] = username;
 	    cherrypy.session['password'] = password;
             #cherrypy.session['username'] = "abc";
+	    #test1 = self.getList()
+	    test = self.onlineJSON()
+	    print("asasasa")
             raise cherrypy.HTTPRedirect('/home')
         else:
             #raise cherrypy.HTTPRedirect('/login')
