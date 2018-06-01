@@ -203,17 +203,28 @@ class MainApp(object):
         db.close()
        
         return Page 
-
+    
+    def row2Dict(self,row):
+	return dict(zip(row.keys(),row))	
+	
     @cherrypy.expose
     @cherrypy.tools.json_out() 
     def onlineJSON(self):
 	db = sqlite3.connect('db/clientData')
         db.row_factory = sqlite3.Row
         cursor = db.cursor()
+	keys = ["username", "lastlogin"]
 	cursor.execute("SELECT username, lastlogin FROM online ORDER BY username ASC")
-        data = cursor.fetchall()
-	#data = dict(zip(data.keys(), data))
-	data = dict(data)
+	data = []
+	print(cursor)
+	for row in cursor:
+		print(row)
+		print(row.keys())
+		data.append(self.row2Dict(row))
+		#print(data)
+        #data = cursor.fetchall()
+	#data = zip(keys, data)
+	#data = dict(data)
 	#data = json.dumps(data)
     	db.close()
 	print(type(data))
@@ -230,7 +241,7 @@ class MainApp(object):
 	    cherrypy.session['password'] = password;
             #cherrypy.session['username'] = "abc";
 	    #test1 = self.getList()
-	    test = self.onlineJSON()
+	    #test = self.onlineJSON()
 	    print("asasasa")
             raise cherrypy.HTTPRedirect('/home')
         else:

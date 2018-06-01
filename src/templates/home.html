@@ -21,30 +21,8 @@
 </div>
 
 
-<div class="Userlist" id = "testb">
-  <p4> Contacts </p4>
-  <a href="#" class="active">Home</a>
-  <a href="#" >Link 1</a>
-  <a href="#">Link 2</a>
-  <a href="#">Link 3</a>
-  <a href="#">Link 4</a>
+<div class="Userlist" id = "Users">
 
-<a href="#">Link 1</a>
-  <a href="#">Link 2</a>
-  <a href="#">Link 3</a>
-  <a href="#">Link 4</a>
-<a href="#">Link 1</a>
-  <a href="#">Link 2</a>
-  <a href="#">Link 3</a>
-  <a href="#">Link 4</a>
-<a href="#">Link 1</a>
-  <a href="#">Link 2</a>
-  <a href="#">Link 3</a>
-  <a href="#">Link 4</a>
-<a href="#">Link 1</a>
-  <a href="#">Link 2</a>
-  <a href="#">Link 3</a>
-  <a href="#">Link 4</a>
 </div>
 
 <div class="Content" id = "abb">
@@ -60,8 +38,12 @@
 </div>
 
   <script id = "template" type = "text/x-handlebars-template">  
-<p>My name is {{bpat714}} and I live at {{street}} in {{city}}, {{state}}</p> 
-<p> {{username}} abc </p> </script>
+{{#each this}}
+<div>
+<a href="/abc?username={{USERNAME}}">{{USERNAME}} : {{LASTLOGIN}} </a>
+</div>
+{{/each}}
+</script>
 
 <script>
  
@@ -71,14 +53,14 @@
  
   // Generate a JS function that will create the output
   
-  $.getJSON('/onlineJSON', function(result) {
-	console.log(result.bpat714);
-	 
+  $.getJSON('/onlineJSON', function(data) {
+	console.log(data);
+	
 	var template = Handlebars.compile(myInfo);
-  var html = template(result);
+  var html = template(data);
  
   // Update the div with the completed output
-  $("#derekData").append(html);});
+  $("#Users").append(html);});
   // template receives the key / value pairs and puts
   // them in place
   //data = {name: "Derek", street: "123 Main St", city: "Pittsburgh", state: "PA"}
