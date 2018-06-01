@@ -22,12 +22,10 @@ import socket
 import sqlite3
 import json
 
+
+import dbFunc as test
+
 import os, os.path
-
-from jinja2 import Environment, FileSystemLoader
-
-file_loader = FileSystemLoader('templates')
-env = Environment(loader = file_loader)
 
 class MainApp(object):
 
@@ -48,6 +46,7 @@ class MainApp(object):
     # PAGES (which return HTML that can be viewed in browser)
     @cherrypy.expose
     def index(self):
+	
         Page = "Welcome! This is a test website for COMPSYS302!<br/>"
         
         try:
@@ -67,12 +66,6 @@ class MainApp(object):
     @cherrypy.expose
     def login(self):
 	Page = open("./templates/login.html").read()
-	#template = env.get_template('login.html')
-	#Page = template.render()
-        #Page = '<form action="/signin" method="post" enctype="multipart/form-data">' #signin the fucntion that the button does
-        #Page += 'Username: <input type="text" name="username"/><br/>'
-        #Page += 'Password: <input type="text" name="password"/>'
-        #Page += '<input type="submit" value="Loginxd"/></form>'
         return Page
 
     @cherrypy.expose

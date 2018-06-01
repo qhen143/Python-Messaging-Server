@@ -11,10 +11,11 @@ div.NavBar h {
 	padding-top: 3vh;
 	margin-right: 5vw;
 	color:white;
+	font-weight: bold;
 }
 
 div.NavBar img {
-	width:5vw;
+	width:4vw;
 	height: auto;
 	position:absolute;
 	right: 0;
@@ -57,6 +58,7 @@ div.Userlist a {
     display: block; /* Make the links appear below each other */
     padding: 5px; /* Add some padding */
     text-decoration: none; /* Remove underline from links */
+    border-style: solid;
 }
 
 div.Userlist a:hover {
