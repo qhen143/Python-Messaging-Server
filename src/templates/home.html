@@ -3,30 +3,33 @@
 <link rel="stylesheet" type="text/css" href="static/mystyle.css">
 <head>
 </head>
-<body>
+<body onload = "loadUsers()">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="static/handlebars-v4.0.11.js"></script>
 
 <div id="derekData"></div>
 
 <div class="Header">
-  <p8>Memes weed blaze it crips</p8>
 </div>
 
 <div class="NavBar">
-  <a class="active" href="#home">Home</a>
-  <a href="#news">News</a>
+  <a class="active" href="#home">Profile</a>
+  <a href="#news">Messenger</a>
   <a href="#contact">Contact</a>
-  <a href="#about">About</a>
+  <a href="#about">Sign Out</a>
+
+  <h>W33D Wizard</h>
+  <img src="static/pepe.png">
 </div>
 
 
-<div class="Userlist" id = "Users">
+<div class="Userlist" id = "Users" >
 
 </div>
 
 <div class="Content" id = "abb">
   <h3>Sticky Navigation Example</h3>
+<img src="static/pepe.png">
   <p>The navbar will stick to the top when you reach its scroll position.</p>
   <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
   <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
@@ -46,26 +49,18 @@
 </script>
 
 <script>
- 
-  // Structure how I want the data to dynamically be
-  // placed by defining the keys in between {{}}
+function loadUsers() {
   var myInfo = document.getElementById("template").innerHTML;
- 
-  // Generate a JS function that will create the output
   
   $.getJSON('/onlineJSON', function(data) {
 	console.log(data);
 	
 	var template = Handlebars.compile(myInfo);
-  var html = template(data);
+  	var html = template(data);
  
-  // Update the div with the completed output
   $("#Users").append(html);});
-  // template receives the key / value pairs and puts
-  // them in place
-  //data = {name: "Derek", street: "123 Main St", city: "Pittsburgh", state: "PA"}
-  
-  </script>
+} 
+</script>
 
 </body>
 </html>

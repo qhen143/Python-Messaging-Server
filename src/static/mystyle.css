@@ -1,19 +1,35 @@
-div.Header {
-  background-color: steelblue;
-  padding: 20px;
-  text-align: center;
-}
 
 div.NavBar {
-	background-color: seashell;
+	background-color: steelblue;
+	width: 100%;
+	height:10vh;
 	overflow: hidden;
 }
 
+div.NavBar h {
+	float:right;
+	padding-top: 3vh;
+	margin-right: 5vw;
+	color:white;
+}
+
+div.NavBar img {
+	width:5vw;
+	height: auto;
+	position:absolute;
+	right: 0;
+}
+
+div.Content img {
+	width:auto;
+	height:auto;
+	float:right;
+}
 div.NavBar a {
     float: left;
-    color: slategray;
+    color: white;
     text-align: center;
-    padding: 15px 50px;
+    padding: 4vh 4vw;
     text-decoration: none;
     font-size: 17px;
 }
@@ -30,8 +46,8 @@ div.NavBar a.active {
 
 div.Userlist {
     width: 300px;
-    height: 500px;
-    overflow-y: auto;
+    height: 90vh;
+    overflow-y: scroll;
     float: right;
 }
 
@@ -61,7 +77,9 @@ div.Userlist p4 {
 
 div.Content {
     margin-right:300px;
-    margin-left:50px
+    margin-left:50px;	
+    overflow-y: auto;
+    height:90vh;
 }
 
 
@@ -70,9 +88,16 @@ div.Header p8 {
 	color:white;
 	
 }
+
+html{
+	overflow-x:hidden;
+	width: 100vw;
+}
+
 body {
   margin: 0;
   font-size: 28px;
-font-family: Arial, Helvetica, sans-serif;
+
+  font-family: Arial, Helvetica, sans-serif;
 }
 
