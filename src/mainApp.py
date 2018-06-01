@@ -66,14 +66,19 @@ class MainApp(object):
         
     @cherrypy.expose
     def login(self):
-
-	template = env.get_template('login.html')
-	Page = template.render()
+	Page = open("./templates/login.html").read()
+	#template = env.get_template('login.html')
+	#Page = template.render()
         #Page = '<form action="/signin" method="post" enctype="multipart/form-data">' #signin the fucntion that the button does
         #Page += 'Username: <input type="text" name="username"/><br/>'
         #Page += 'Password: <input type="text" name="password"/>'
         #Page += '<input type="submit" value="Loginxd"/></form>'
         return Page
+
+    @cherrypy.expose
+    def home(self):
+	Page = open("./templates/home.html").read()
+	return Page
 
     @cherrypy.expose
     def logout(self):
@@ -140,6 +145,7 @@ class MainApp(object):
                  VALUES(?,?,?,?)''', param)
         db.commit()
         db.close()
+	return '0'
 
     @cherrypy.expose    
     def ping(self, sender): #All inputs are strings by default
@@ -206,7 +212,7 @@ class MainApp(object):
             cherrypy.session['username'] = username;
 	    cherrypy.session['password'] = password;
             #cherrypy.session['username'] = "abc";
-            raise cherrypy.HTTPRedirect('/')
+            raise cherrypy.HTTPRedirect('/home')
         else:
             #raise cherrypy.HTTPRedirect('/login')
             raise cherrypy.HTTPRedirect('/sum?a=3&b=5')

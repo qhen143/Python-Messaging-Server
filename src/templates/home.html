@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html>
-<link rel="stylesheet" type="text/css" href="mystyle.css">
+<link rel="stylesheet" type="text/css" href="static/mystyle.css">
 <head>
 </head>
 <body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="static/handlebars-v4.0.11.js"></script>
+
+<div id="derekData"></div>
 
 <div class="Header">
   <p8>Memes weed blaze it crips</p8>
@@ -17,10 +21,10 @@
 </div>
 
 
-<div class="Userlist">
+<div class="Userlist" id = "testb">
   <p4> Contacts </p4>
   <a href="#" class="active">Home</a>
-  <a href="#">Link 1</a>
+  <a href="#" onclick = mmm()>Link 1</a>
   <a href="#">Link 2</a>
   <a href="#">Link 3</a>
   <a href="#">Link 4</a>
@@ -43,7 +47,7 @@
   <a href="#">Link 4</a>
 </div>
 
-<div class="Content">
+<div class="Content" id = "abb">
   <h3>Sticky Navigation Example</h3>
   <p>The navbar will stick to the top when you reach its scroll position.</p>
   <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
@@ -54,6 +58,28 @@
   <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
   <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
 </div>
+
+  <script id = "template" type = "text/x-handlebars-template">  <p>My name is {{name}} and I live at {{street}} in {{city}}, {{state}}</p> </script>
+
+  <script>
+ function mmm() {
+  // Structure how I want the data to dynamically be
+  // placed by defining the keys in between {{}}
+  var myInfo = document.getElementById("template").innerHTML;
+ 
+  // Generate a JS function that will create the output
+  var template = Handlebars.compile(myInfo);
+ 
+  // template receives the key / value pairs and puts
+  // them in place
+  data = {name: "Derek", street: "123 Main St", city: "Pittsburgh", state: "PA"}
+
+  var html = template(data);
+ 
+  // Update the div with the completed output
+  //document.getElementById('derekData').innerHTML += html;
+  $("#testb").append(html);}
+  </script>
 
 </body>
 </html>
