@@ -29,6 +29,7 @@
 
 <div class="Content" id = "abb">
   <h3>Sticky Navigation Example</h3>
+
 <img src="static/pepe.png">
   <p>The navbar will stick to the top when you reach its scroll position.</p>
 
@@ -63,12 +64,42 @@ function loadUsers() {
 } 
 </script>
 
+
+
+
  <script id = "msgTemplate" type = "text/x-handlebars-template">  
-<div id = "inputForm">
- <form action="/sendMessage?sender=qhen143&destination={{username}}&stamp=abc" method = "post">
- Message: <input type="text" name="message" value = "henlo" ><br/>
-        <input type="submit" value={{username}}></form>
+<div id = "disp" class="msgScreen">
+<p> abc </p> 
+<img src="static/pepe.png">  
+</div> 
+
+
+<div id = "inputForm" class = "iForm">
+<form onSubmit="return sendMsg('{{username}}');">
+<input id="message" type="text" value= "a/s/l?" autofocus />
+<input type="submit" value="Send to {{username}}" />
+</form>
 </div>
+</script>
+
+<script>
+function sendMsg(destination) {
+  console.log("start")
+  console.log(destination)
+  var response = document.getElementById('message').value;
+  //var myInfo = document.getElementById("userlistTemplate").innerHTML;
+  console.log(response)
+  $.getJSON('/msgJS?destination='+destination+'&message='+response, function(data) {
+	//console.log(data);
+	
+	//var template = Handlebars.compile(myInfo);
+  	//var html = template(data);
+ 
+  //$("#Users").append(html);}
+});
+console.log("help")
+return false;
+} 
 </script>
 
 <script>
@@ -80,8 +111,9 @@ function msgDisp(user) {
 	var data = {username: user};
 	var template = Handlebars.compile(myInfo);
   	var html = template(data);
- 
-
+        
+	var dynamicTemp = 
+//$("#abb").html(dynamicTemp);
 $("#abb").html(html);
  
 } 

@@ -90,6 +90,14 @@ class MainApp(object):
         return Page
     
     @cherrypy.expose
+    @cherrypy.tools.json_out()
+    def msgJS(self,destination,message):
+	print(destination)
+	sender = cherrypy.session.get('username')
+	self.sendMessage(sender,destination, message, "")
+	return {'status':0}
+	
+    @cherrypy.expose
     def sendMessage(self, sender, destination, message, stamp, enc=0, encryption = None, hashing = 0, hash = "", decryptionKey = 0 , groupID = ""): #dont need all these params
 
 	url = dbLib.getUserAddress(destination)

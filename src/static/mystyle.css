@@ -84,7 +84,26 @@ div.Content {
     height:90vh;
 }
 
+div.iForm {
+	background-color:steelblue;
+	height: 10vh;
+	position:absolute;
+ bottom:0;
+}
 
+div.msgScreen {
+	background-color:steelblue;
+	height: 10vh;
+	width: 10vw;
+color:green;
+	
+}
+
+div.msgScreen p {
+	background-color:steelblue;
+color:green;
+	
+}
 
 div.Header p8 {
 	color:white;

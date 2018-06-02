@@ -31,6 +31,7 @@ def insertMessage(parameters):
                  VALUES(?,?,?,?,?,?,?,?,?,?)''', parameters)
         db.commit()
         db.close()
+	print("saved msg")
 
 
 def insertOnline(parameters):
