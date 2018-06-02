@@ -4,71 +4,34 @@
 
 <head>
 </head>
-<body>
+<body onload = "loadUsers()">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="handlebars-v4.0.11.js"></script>
-<script>
-$.getJSON("https://10.103.137.36:10004/getOnline", function(data) {
-	var source   = document.getElementById("userlist").innerHTML;
-	var template = Handlebars.compile(source);
-	var context = {username: "My New Post", ip: "This is my first post!", publickey: "", location: , lastlogin, port};
-	var html    = template(context);
-});
-</script>
+<script src="static/handlebars-v4.0.11.js"></script>
 
-<script>
-function dispMsgPg() {
-    document.getElementById("abc").innerHTML = "Paragraph changed.";
-}
-
-<script id="userlist" type="text/x-handlebars-template">
-    {{#each user}}
-    <a onclick="dispMsgPg("+{{user}}+)" href="javascript:void(0);"> {{user}}</a>
-</script>
+<div id="derekData"></div>
 
 <div class="Header">
-  <p8>Memes weed blaze it crips</p8>
 </div>
 
 <div class="NavBar">
-  <a class="active" href="#home">Home</a>
-  <a href="#news">News</a>
+  <a class="active" href="#home">Profile</a>
+  <a href="/msg?sender=qhen143&destination=qhen143">Messenger</a>
   <a href="#contact">Contact</a>
-  <a href="#about">About</a>
+  <a href="#about">Sign Out</a>
+
+  <h>W33D Wizard</h>
+  <img src="static/pepe.png">
 </div>
 
+<div class="Userlist" id = "Users" >
 
-<div class="Userlist" onload = getList()>
-  <p4> Contacts </p4>
-  <a href="#" class="active">Home</a>
-  <a href="#">Link 1</a>
-  <a href="#">Link 2</a>
-  <a href="#">Link 3</a>
-  <a href="#">Link 4</a>
-
-<a href="#">Link 1</a>
-  <a href="#">Link 2</a>
-  <a href="#">Link 3</a>
-  <a href="#">Link 4</a>
-<a href="#">Link 1</a>
-  <a href="#">Link 2</a>
-  <a href="#">Link 3</a>
-  <a href="#">Link 4</a>
-<a href="#">Link 1</a>
-  <a href="#">Link 2</a>
-  <a href="#">Link 3</a>
-  <a href="#">Link 4</a>
-<a href="#">Link 1</a>
-  <a href="#">Link 2</a>
-  <a href="#">Link 3</a>
-  <a href="#">Link 4</a>
 </div>
 
-
-
-<div class="Content">
+<div class="Content" id = "abb">
   <h3>Sticky Navigation Example</h3>
-  <p>https://stackoverflow.com/questions/14175293/getjson-results-into-html </p>
+<img src="static/pepe.png">
+  <p>The navbar will stick to the top when you reach its scroll position.</p>
+
   <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
   <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
   <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
@@ -77,6 +40,28 @@ function dispMsgPg() {
   <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
   <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
 </div>
+
+  <script id = "template" type = "text/x-handlebars-template">  
+{{#each this}}
+<div>
+<a href="/abc?username={{USERNAME}}">{{USERNAME}} : {{LASTLOGIN}} </a>
+</div>
+{{/each}}
+</script>
+
+<script>
+function loadUsers() {
+  var myInfo = document.getElementById("template").innerHTML;
+  
+  $.getJSON('/onlineJSON', function(data) {
+	console.log(data);
+	
+	var template = Handlebars.compile(myInfo);
+  	var html = template(data);
+ 
+  $("#Users").append(html);});
+} 
+</script>
 
 </body>
 </html>

@@ -21,13 +21,12 @@ import hashlib
 import socket
 import sqlite3
 import json
+import collections
+
+
+import dbFunc as test
 
 import os, os.path
-
-from jinja2 import Environment, FileSystemLoader
-
-file_loader = FileSystemLoader('templates')
-env = Environment(loader = file_loader)
 
 class MainApp(object):
 
@@ -48,6 +47,7 @@ class MainApp(object):
     # PAGES (which return HTML that can be viewed in browser)
     @cherrypy.expose
     def index(self):
+	
         Page = "Welcome! This is a test website for COMPSYS302!<br/>"
         
         try:
@@ -67,20 +67,17 @@ class MainApp(object):
     @cherrypy.expose
     def login(self):
 
-	#template = env.get_template('login.html')
-	#Page = template.render()
-
-	Page = open('templates/login.html')	
-
-        #Page = '<form action="/signin" method="post" enctype="multipart/form-data">' #signin the fucntion that the button does
-        #Page += 'Username: <input type="text" name="username"/><br/>'
-        #Page += 'Password: <input type="text" name="password"/>'
-        #Page += '<input type="submit" value="Loginxd"/></form>'
+	Page = open("./templates/login.html").read()
         return Page
     
     @cherrypy.expose
     def home(self):
         Page = open('templates/home.html')
+	return Page
+
+    @cherrypy.expose
+    def home(self):
+	Page = open("./templates/home.html").read()
 	return Page
 
     @cherrypy.expose
@@ -103,21 +100,27 @@ class MainApp(object):
         return Page
     
     @cherrypy.expose
-    def sendMessage(self, sender, destination, message, stamp, enc=0, hashing = 0, hash = "", decryptionKey = 0 , groupID = ""): #dont need all these params
+    def sendMessage(self, sender, destination, message, stamp, enc=0, encryption = None, hashing = 0, hash = "", decryptionKey = 0 , groupID = ""): #dont need all these params
         db = sqlite3.connect('db/clientData')
         cursor = db.cursor()
         print(destination)
         cursor.execute('''SELECT ip, port FROM online where username = ? ''', [destination])
         destinationData = cursor.fetchone()
         url = "http://"+ str(destinationData[0]) +":"+ str(destinationData[1]) + "/receiveMessage"
+	#url = test.getUserAddress(destination)
+	print(url)
         stamp = "1527573585"
-        data = {'sender': sender, 'destination':destination, 'message': message, 'stamp': stamp}
-
-        param = []
-        for key in data:
-            param.append(data[key])
-        print(param)
-        param = tuple(reversed(param))
+        #data = {'sender': sender, 'destination':destination, 'message': message, 'stamp': stamp, 'enc':enc, 'encryption':encryption, 'hashing':hashing, 'hash':hash, 'decryptionKey':decryptionKey, 'groupID':groupID }
+	key = ['sender', 'destination','message', 'stamp', 'enc', 'encryption', 'hashing', 'hash', 'decryptionKey', 'groupID' ]
+	param = [sender, destination,message, stamp, enc, encryption, hashing, hash, decryptionKey, groupID ]
+	data = collections.OrderedDict(zip(key,param))
+        #param = []
+        #for key in data:
+	#    print(key)
+        #    param.append(data[key])
+        #    print(param)
+        #print(param)
+        #param = tuple(reversed(param))
 
         data = json.dumps(data)
         request = urllib2.Request(url,data, {'Content-Type': 'application/json'})
@@ -126,8 +129,8 @@ class MainApp(object):
         print(error.read())
         print(destinationData[0],destinationData[1])
         print(error.read())
-        cursor.execute('''INSERT INTO messages(sender, destination, message, timestamp)
-                 VALUES(?,?,?,?)''', param)
+        cursor.execute('''INSERT INTO messages(sender, destination, message, stamp, enc, encryption, hashing, hash, decryptionKey, groupID)
+                 VALUES(?,?,?,?,?,?,?,?,?,?)''', param)
         db.commit()
         db.close()
 
@@ -135,19 +138,29 @@ class MainApp(object):
     @cherrypy.tools.json_in()
     def receiveMessage(self):
         data = cherrypy.request.json
+	print("abc")
         print(data)
-        param = []
-        for key in data:
-            param.append(data[key])
-        print(param)
-        param = tuple(reversed(param))
-        print(param)
+	#data = collections.OrderedDict(key_value_pairs)
+	print(type(data))
+	print("zzz")
+	try:
+            param = tuple([data['sender'],data['destination'],data['message'],data['stamp'],data['enc'],data['encryption'],data['hashing'],data['hash'],data['decryptionKey'],data['groupID']])
+	    print(param)
+	except KeyError:
+	    param = tuple([data['sender'],data['destination'],data['message'],data['stamp'],'0', "", '0', "", "" , ""])
+        #for key in data:
+        #    param.append(data[key])
+        #print(param)
+        #param = tuple(reversed(param))
+        #print(param)
+	#param = [data, 'destination','message', 'stamp', 'enc', 'encryption', 'hashing', 'hash', 'decryptionKey', 'groupID' ]
         db = sqlite3.connect('db/clientData')
         cursor = db.cursor()
-        cursor.execute('''INSERT INTO messages(sender, destination, message, timestamp)
-                 VALUES(?,?,?,?)''', param)
+        cursor.execute('''INSERT INTO messages(sender, destination, message, stamp, enc, encryption, hashing, hash, decryptionKey, groupID)
+                 VALUES(?,?,?,?,?,?,?,?,?,?)''', param)
         db.commit()
         db.close()
+	return '0'
 
     @cherrypy.expose    
     def ping(self, sender): #All inputs are strings by default
@@ -203,20 +216,37 @@ class MainApp(object):
         print("asass" + str(self.ping("qhen143")))
         db.commit()
         db.close()
-        return Page
+       
+        return Page 
     
+    def row2Dict(self,row):
+	return dict(zip(row.keys(),row))	
+	
     @cherrypy.expose
-    def retrieveOnline(self):
-        db = sqlite3.connect('db/clientData')
+    @cherrypy.tools.json_out() 
+    def onlineJSON(self):
+	self.getList()
+	db = sqlite3.connect('db/clientData')
         db.row_factory = sqlite3.Row
         cursor = db.cursor()
-        cursor.execute('''SELECT * FROM online ORDER BY ID ASC''')
-        data = cursor.fetchall()
-        db.close()
-	print(data)
+	keys = ["username", "lastlogin"]
+	cursor.execute("SELECT username, lastlogin FROM online ORDER BY username ASC")
+	data = []
+	print(cursor)
+	for row in cursor:
+		print(row)
+		print(row.keys())
+		data.append(self.row2Dict(row))
+		#print(data)
+        #data = cursor.fetchall()
+	#data = zip(keys, data)
+	#data = dict(data)
+	#data = json.dumps(data)
+    	db.close()
+	print(type(data))
+	print data
         return data
-        
-    
+   
     # LOGGING IN AND OUT
     @cherrypy.expose
     def signin(self, username=None, password=None):
@@ -226,7 +256,10 @@ class MainApp(object):
             cherrypy.session['username'] = username;
 	    cherrypy.session['password'] = password;
             #cherrypy.session['username'] = "abc";
-            raise cherrypy.HTTPRedirect('/')
+	    #test1 = self.getList()
+	    #test = self.onlineJSON()
+	    print("asasasa")
+            raise cherrypy.HTTPRedirect('/home')
         else:
             #raise cherrypy.HTTPRedirect('/login')
             raise cherrypy.HTTPRedirect('/sum?a=3&b=5')
