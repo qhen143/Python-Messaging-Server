@@ -41,17 +41,17 @@
   <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
 </div>
 
-  <script id = "template" type = "text/x-handlebars-template">  
+  <script id = "userlistTemplate" type = "text/x-handlebars-template">  
 {{#each this}}
 <div>
-<a href="/abc?username={{USERNAME}}">{{USERNAME}} : {{LASTLOGIN}} </a>
+<a href="javascript:void(0);" onclick= "msgDisp('{{USERNAME}}')">{{USERNAME}} : {{LASTLOGIN}} </a>
 </div>
 {{/each}}
 </script>
 
 <script>
 function loadUsers() {
-  var myInfo = document.getElementById("template").innerHTML;
+  var myInfo = document.getElementById("userlistTemplate").innerHTML;
   
   $.getJSON('/onlineJSON', function(data) {
 	console.log(data);
@@ -60,6 +60,30 @@ function loadUsers() {
   	var html = template(data);
  
   $("#Users").append(html);});
+} 
+</script>
+
+ <script id = "msgTemplate" type = "text/x-handlebars-template">  
+<div id = "inputForm">
+ <form action="/sendMessage?sender=qhen143&destination={{username}}&stamp=abc" method = "post">
+ Message: <input type="text" name="message" value = "henlo" ><br/>
+        <input type="submit" value={{username}}></form>
+</div>
+</script>
+
+<script>
+function msgDisp(user) {
+  var myInfo = document.getElementById("msgTemplate").innerHTML;
+  
+  //$.getJSON('/onlineJSON', function(data) {
+	//console.log(data);
+	var data = {username: user};
+	var template = Handlebars.compile(myInfo);
+  	var html = template(data);
+ 
+
+$("#abb").html(html);
+ 
 } 
 </script>
 
