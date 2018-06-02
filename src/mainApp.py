@@ -22,9 +22,10 @@ import socket
 import sqlite3
 import json
 import collections
+import time
 
 
-import dbFunc as test
+import dbFunc as dbLib
 
 import os, os.path
 
@@ -69,11 +70,6 @@ class MainApp(object):
 
 	Page = open("./templates/login.html").read()
         return Page
-    
-    @cherrypy.expose
-    def home(self):
-        Page = open('templates/home.html')
-	return Page
 
     @cherrypy.expose
     def home(self):
@@ -87,12 +83,6 @@ class MainApp(object):
         return Page
 
     @cherrypy.expose
-    def list(self):
-        Page = '<form action="/getList">'
-        Page += '<input type="submit" value="getList"/></form>'
-        return Page
-
-    @cherrypy.expose
     def msg(self,sender, destination):
         Page = '<form action=/sendMessage?sender='+sender+'&destination='+destination+'&stamp=abc method = "post">'
 	Page += 'Message: <input type="text" name="message" value = message/><br/>'
@@ -101,65 +91,35 @@ class MainApp(object):
     
     @cherrypy.expose
     def sendMessage(self, sender, destination, message, stamp, enc=0, encryption = None, hashing = 0, hash = "", decryptionKey = 0 , groupID = ""): #dont need all these params
-        db = sqlite3.connect('db/clientData')
-        cursor = db.cursor()
-        print(destination)
-        cursor.execute('''SELECT ip, port FROM online where username = ? ''', [destination])
-        destinationData = cursor.fetchone()
-        url = "http://"+ str(destinationData[0]) +":"+ str(destinationData[1]) + "/receiveMessage"
-	#url = test.getUserAddress(destination)
+
+	url = dbLib.getUserAddress(destination)
 	print(url)
-        stamp = "1527573585"
+        stamp = str(time.time())
         #data = {'sender': sender, 'destination':destination, 'message': message, 'stamp': stamp, 'enc':enc, 'encryption':encryption, 'hashing':hashing, 'hash':hash, 'decryptionKey':decryptionKey, 'groupID':groupID }
 	key = ['sender', 'destination','message', 'stamp', 'enc', 'encryption', 'hashing', 'hash', 'decryptionKey', 'groupID' ]
 	param = [sender, destination,message, stamp, enc, encryption, hashing, hash, decryptionKey, groupID ]
 	data = collections.OrderedDict(zip(key,param))
-        #param = []
-        #for key in data:
-	#    print(key)
-        #    param.append(data[key])
-        #    print(param)
-        #print(param)
-        #param = tuple(reversed(param))
 
         data = json.dumps(data)
         request = urllib2.Request(url,data, {'Content-Type': 'application/json'})
         print(request)
         error = urllib2.urlopen(request)
         print(error.read())
-        print(destinationData[0],destinationData[1])
-        print(error.read())
-        cursor.execute('''INSERT INTO messages(sender, destination, message, stamp, enc, encryption, hashing, hash, decryptionKey, groupID)
-                 VALUES(?,?,?,?,?,?,?,?,?,?)''', param)
-        db.commit()
-        db.close()
+	dbLib.insertMessage(param)
 
     @cherrypy.expose
     @cherrypy.tools.json_in()
     def receiveMessage(self):
         data = cherrypy.request.json
-	print("abc")
-        print(data)
-	#data = collections.OrderedDict(key_value_pairs)
-	print(type(data))
-	print("zzz")
+
 	try:
             param = tuple([data['sender'],data['destination'],data['message'],data['stamp'],data['enc'],data['encryption'],data['hashing'],data['hash'],data['decryptionKey'],data['groupID']])
 	    print(param)
+
 	except KeyError:
 	    param = tuple([data['sender'],data['destination'],data['message'],data['stamp'],'0', "", '0', "", "" , ""])
-        #for key in data:
-        #    param.append(data[key])
-        #print(param)
-        #param = tuple(reversed(param))
-        #print(param)
-	#param = [data, 'destination','message', 'stamp', 'enc', 'encryption', 'hashing', 'hash', 'decryptionKey', 'groupID' ]
-        db = sqlite3.connect('db/clientData')
-        cursor = db.cursor()
-        cursor.execute('''INSERT INTO messages(sender, destination, message, stamp, enc, encryption, hashing, hash, decryptionKey, groupID)
-                 VALUES(?,?,?,?,?,?,?,?,?,?)''', param)
-        db.commit()
-        db.close()
+        
+	dbLib.insertMessage(param)
 	return '0'
 
     @cherrypy.expose    
@@ -180,42 +140,44 @@ class MainApp(object):
         json1 = json.loads(output)
         print(isinstance(json1, dict))
         print(json1)
-        db = sqlite3.connect('db/clientData')
+        #db = sqlite3.connect('db/clientData')
         print("read")
-        cursor = db.cursor()
-        cursor.execute('''DELETE FROM online''')
+        #cursor = db.cursor()
+        #cursor.execute('''DELETE FROM online''')
+	dbLib.deleteOnline()
 
         columns = ['username', 'ip', 'location', 'lastLogin', 'port']
         #insert data into database
         for index, data in json1.iteritems():
             keys = (index,) + tuple(data[c] for c in columns)
-            cursor.execute('''INSERT INTO online(ID, USERNAME, IP, LOCATION, LASTLOGIN, PORT)
-                  VALUES(?,?,?,?,?,?)''', keys)
+            #cursor.execute('''INSERT INTO online(ID, USERNAME, IP, LOCATION, LASTLOGIN, PORT)
+            #      VALUES(?,?,?,?,?,?)''', keys)
+            dbLib.insertOnline(keys)
         
         #display from database
-        cursor.execute('''SELECT * FROM online ORDER BY ID ASC''')
-        data = cursor.fetchall()
+        #cursor.execute('''SELECT * FROM online ORDER BY ID ASC''')
+        #data = cursor.fetchall()
         Page = "<table><tr><td>id</td>"
         for x in columns:
             Page += "<td>"+str(x)+"</td>"
         Page += "</tr>"
-        for row in data:
-            print(row)
-            Page += "<tr>"
-            for index in row:
-                print(index)
-                Page += "<td>"+str(index)+"</td>"
-            Page += "</tr>"
-        Page += "</table>"
+        #for row in data:
+        #    print(row)
+        #    Page += "<tr>"
+        #    for index in row:
+        #        print(index)
+        #        Page += "<td>"+str(index)+"</td>"
+        #    Page += "</tr>"
+        #Page += "</table>"
 
         #testing messaging table
-        Page += "<table><tr><td>" + columns[0] + "</td> <td> ping! </td> </tr>"
-        for row in data:
-            Page += "<tr><td><a href='msg?sender="+username +"&destination=" + row[1] + "'>" + row[1] + "</a></td> <td><a href='"+row[2]+":"+str(row[5])+"/ping?sender=qhen143'>ping</a></td></tr>"
-        Page += "</table>"
-        print("asass" + str(self.ping("qhen143")))
-        db.commit()
-        db.close()
+        #Page += "<table><tr><td>" + columns[0] + "</td> <td> ping! </td> </tr>"
+        #for row in data:
+        #    Page += "<tr><td><a href='msg?sender="+username +"&destination=" + row[1] + "'>" + row[1] + "</a></td> <td><a href='"+row[2]+":"+str(row[5])+"/ping?sender=qhen143'>ping</a></td></tr>"
+        #Page += "</table>"
+        #print("asass" + str(self.ping("qhen143")))
+        #db.commit()
+        #db.close()
        
         return Page 
     
@@ -226,23 +188,25 @@ class MainApp(object):
     @cherrypy.tools.json_out() 
     def onlineJSON(self):
 	self.getList()
-	db = sqlite3.connect('db/clientData')
-        db.row_factory = sqlite3.Row
-        cursor = db.cursor()
-	keys = ["username", "lastlogin"]
-	cursor.execute("SELECT username, lastlogin FROM online ORDER BY username ASC")
-	data = []
-	print(cursor)
-	for row in cursor:
-		print(row)
-		print(row.keys())
-		data.append(self.row2Dict(row))
+	#db = sqlite3.connect('db/clientData')
+        #db.row_factory = sqlite3.Row
+        #cursor = db.cursor()
+	#keys = ["username", "lastlogin"]
+	#cursor.execute("SELECT username, lastlogin FROM online ORDER BY username ASC")
+	#data = []
+	#print(cursor)
+	#for row in cursor:
+	#	print(row)
+	#	print(row.keys())
+	#	data.append(self.row2Dict(row))
 		#print(data)
+
         #data = cursor.fetchall()
 	#data = zip(keys, data)
 	#data = dict(data)
 	#data = json.dumps(data)
-    	db.close()
+    	#db.close()
+	data = dbLib.getOnline()
 	print(type(data))
 	print data
         return data
@@ -280,7 +244,7 @@ class MainApp(object):
 #B3FCE8CFCA6465845E55964425D585E874818DC351037B88858C413CECAEDB19
 	hash1 = hashlib.sha256(password+username).hexdigest()
 	
-	ip = socket.gethostbyname(socket.gethostname())
+	#ip = socket.gethostbyname(socket.gethostname())
 	
 	#s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         #s.connect(("8.8.8.8", 80))
@@ -288,9 +252,9 @@ class MainApp(object):
         #print(s.getsockname()[0])
         #s.close()
 
-	#ip = urllib2.urlopen('http://ip.42.pl/raw').read()
+	ip = urllib2.urlopen('http://ip.42.pl/raw').read()
 	print ip
-        test = urllib.urlopen("http://cs302.pythonanywhere.com/report?username=" + username+"&password="+ hash1+"&location=0&ip="+ip+"&port="+str(listen_port)+"&enc=0")
+        test = urllib.urlopen("http://cs302.pythonanywhere.com/report?username=" + username+"&password="+ hash1+"&location=2&ip="+ip+"&port="+str(listen_port)+"&enc=0")
 	output = test.read().decode('utf-8')
 	print output
         print username
