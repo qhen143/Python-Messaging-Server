@@ -97,7 +97,7 @@ function loadUsers() {
 	{{#each this}}
 
 	<div class="msgContainer">
-		<p1>{{MESSAGE}} sent{{username}}@{{STAMP}}</p1>
+		<p1><b>{{SENDER}}</b>: {{MESSAGE}} <i>sent@{{STAMP}}</i></p1>
 	</div>
 
 	{{/each}} 
@@ -112,7 +112,7 @@ function msgDisp(user) {
 		console.log(data);
 	
 		var template = Handlebars.compile(myInfo);
-  		var html = template(data, {'username':user});
+  		var html = template(data);
 
 	$("#abc").html(html);
 });

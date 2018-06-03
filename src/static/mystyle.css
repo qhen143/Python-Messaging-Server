@@ -46,10 +46,12 @@ div.NavBar a.active {
 }
 
 div.Userlist {
-    width: 15vw;;
+    width: 30vw;;
     height: 90vh;
     overflow-y: scroll;
     float: right;
+    bottom:0;
+	
 }
 
 div.Userlist a {
@@ -78,16 +80,15 @@ div.Userlist p4 {
 }
 
 div.Content {
-    background-color:red;
+    background-color:purple;
     margin-left:5vw;
-    width:75vw;
+    width:60vw;
     height:90vh;
-		overflow-y: auto;
 }
 
 
 div.Content div.msgScreen {
-	height: 75vh;
+	height: 80vh;
 	overflow-y: auto;
 
 	
@@ -100,6 +101,19 @@ div.Content div.fff {
 	
 }
 
+div.Content div.fff div.msgScreen div.msgContainer p1 {
+	border: 2px solid #dedede;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+ float: left;
+    max-width: 45vw;
+    width: 100%;
+    margin-right: 2vw;
+	margin-left: 1vw;
+}
+
 div.Content div.iForm {
 	background-color:green;
 	height: 10vh;
@@ -108,7 +122,7 @@ div.Content div.iForm {
 } 
 
 div.Content div.iForm input[type=text] {
-    width:64vw;
+    width:49vw;
     padding:3vh 0;
 	box-sizing: border-box;
     display: inline-block;
@@ -140,5 +154,14 @@ body {
   font-size: 28px;
 
   font-family: Arial, Helvetica, sans-serif;
+}
+
+
+
+div.Content div.profileScreen {
+	height: 75vh;
+	overflow-y: auto;
+
+	
 }
 
