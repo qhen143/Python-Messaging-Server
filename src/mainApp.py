@@ -99,7 +99,9 @@ class MainApp(object):
 	
     @cherrypy.expose
     def sendMessage(self, sender, destination, message, stamp, enc=0, encryption = None, hashing = 0, hash = "", decryptionKey = 0 , groupID = ""): #dont need all these params
-
+	print("asasasasas")
+	print(destination,sender,message,stamp)
+	print("asasasasas")
 	url = dbLib.getUserAddress(destination)
 	print(url)
         stamp = str(time.time())
@@ -191,6 +193,14 @@ class MainApp(object):
     
     def row2Dict(self,row):
 	return dict(zip(row.keys(),row))	
+    
+    @cherrypy.expose
+    @cherrypy.tools.json_out() 
+    def getMsgJSON(self, username):
+	print(dbLib.getMessages(username))
+	return dbLib.getMessages(username)
+	
+
 	
     @cherrypy.expose
     @cherrypy.tools.json_out() 
@@ -283,6 +293,7 @@ def runMainApp():
             'tools.staticdir.dir': './static'
         }
     }
+
     # Create an instance of MainApp and tell Cherrypy to send all requests under / to it. (ie all of them)
     cherrypy.tree.mount(MainApp(), "/", conf)
 

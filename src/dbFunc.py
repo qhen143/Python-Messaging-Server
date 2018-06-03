@@ -33,6 +33,26 @@ def insertMessage(parameters):
         db.close()
 	print("saved msg")
 
+def getMessages(username):
+	db = sqlite3.connect('db/clientData')
+	db.row_factory = sqlite3.Row
+        cursor = db.cursor()
+	cursor.execute('''SELECT sender, destination, message, stamp FROM messages where sender = ? OR destination = ? ORDER BY stamp ASC''', [username,username])
+	data = []
+	print(cursor)
+	
+	for row in cursor:
+		print(row)
+		#print(row.keys())
+		requested = {'username':username}
+		requested.update(row2Dict(row))
+		data.append(requested)
+        db.commit()
+        db.close()
+	print("retreived msg")
+	print(requested)
+	return data
+
 
 def insertOnline(parameters):
 	db = sqlite3.connect('db/clientData')

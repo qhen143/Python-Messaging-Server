@@ -46,7 +46,7 @@ div.NavBar a.active {
 }
 
 div.Userlist {
-    width: 300px;
+    width: 15vw;;
     height: 90vh;
     overflow-y: scroll;
     float: right;
@@ -78,31 +78,46 @@ div.Userlist p4 {
 }
 
 div.Content {
-    margin-right:300px;
-    margin-left:50px;	
-    overflow-y: auto;
+    background-color:red;
+    margin-left:5vw;
+    width:75vw;
     height:90vh;
+    overflow-y:auto;	
 }
 
-div.iForm {
-	background-color:steelblue;
-	height: 10vh;
-	position:absolute;
- bottom:0;
-}
 
-div.msgScreen {
+div.Content div.msgScreen {
 	background-color:steelblue;
-	height: 10vh;
-	width: 10vw;
-color:green;
+	margin:1vh auto;
+	height: 75vh;
+
+	overflow-y: auto;
+
 	
 }
 
-div.msgScreen p {
-	background-color:steelblue;
-color:green;
-	
+div.Content div.iForm {
+	background-color:green;
+	height: 10vh;
+	margin:1vh auto;
+
+} 
+
+div.Content div.iForm input[type=text] {
+    width:64vw;
+    padding:3vh 0;
+	box-sizing: border-box;
+    display: inline-block;
+    border: 1px solid silver;
+}
+
+div.Content div.iForm  input[type=submit] {
+  background-color: steelblue;
+  color: white;
+width:10vw;
+  padding:3vh;
+  border: none;
+  cursor: pointer;
 }
 
 div.Header p8 {
@@ -112,6 +127,7 @@ div.Header p8 {
 
 html{
 	overflow-x:hidden;
+overflow-y: hidden;
 	width: 100vw;
 }
 

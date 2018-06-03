@@ -42,10 +42,11 @@
   <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
 </div>
 
+<!--Setup online users to be display-->
   <script id = "userlistTemplate" type = "text/x-handlebars-template">  
 {{#each this}}
 <div>
-<a href="javascript:void(0);" onclick= "msgDisp('{{USERNAME}}')">{{USERNAME}} : {{LASTLOGIN}} </a>
+<a href="javascript:void(0);" onclick= "setUpMsg('{{USERNAME}}')">{{USERNAME}} : {{LASTLOGIN}} </a>
 </div>
 {{/each}}
 </script>
@@ -66,14 +67,54 @@ function loadUsers() {
 
 
 
-
- <script id = "msgTemplate" type = "text/x-handlebars-template">  
-<div id = "disp" class="msgScreen">
-<p> abc </p> 
-<img src="static/pepe.png">  
-</div> 
+<!--Setup message display-->
+ <script id = "msgDispTemplate" type = "text/x-handlebars-template"> 
 
 
+
+{{#each this}}
+
+<div>
+<p1>{{MESSAGE}} sent{{username}}@{{STAMP}}</p1>
+</div>
+
+{{#if @last}}
+<div id = "inputForm" class = "iForm">
+<form onSubmit="return sendMsg('{{username}}');">
+<input id="message" type="text" value= "a/s/l?" autofocus />
+<input type="submit" value="Send to {{username}}" />
+{{/if}}
+</form>
+</div>
+
+{{/each}} 
+
+
+
+
+
+</script>
+
+<script>
+function msgDisp(user) {
+  var myInfo = document.getElementById("msgDispTemplate").innerHTML;
+  //var data = {username: "blank"};
+  $.getJSON('/getMsgJSON?username='+user, function(data) {
+	console.log(data);
+	
+	var template = Handlebars.compile(myInfo);
+  	var html = template(data);
+        
+	//var dynamicTemp = 
+//$("#abb").html(dynamicTemp);
+$("#abb").html(html);
+});
+ 
+} 
+</script>
+
+<!--Setup input form for messages
+<script id = "msgFormTemplate" type = "text/x-handlebars-template">  
 <div id = "inputForm" class = "iForm">
 <form onSubmit="return sendMsg('{{username}}');">
 <input id="message" type="text" value= "a/s/l?" autofocus />
@@ -82,6 +123,24 @@ function loadUsers() {
 </div>
 </script>
 
+<script>
+function msgForm(user) {
+  var myInfo = document.getElementById("msgFormTemplate").innerHTML;
+  
+  //$.getJSON('/onlineJSON', function(data) {
+	//console.log(data);
+	var data = {username: user};
+	var template = Handlebars.compile(myInfo);
+  	var html = template(data);
+        
+	//var dynamicTemp = 
+//$("#abb").html(dynamicTemp);
+//$("#abb").html(html);
+document.getElementById('abb').innerHTML += html;
+ 
+} 
+</script>
+-->
 <script>
 function sendMsg(destination) {
   console.log("start")
@@ -102,19 +161,15 @@ return false;
 } 
 </script>
 
+
+
+
 <script>
-function msgDisp(user) {
-  var myInfo = document.getElementById("msgTemplate").innerHTML;
-  
-  //$.getJSON('/onlineJSON', function(data) {
-	//console.log(data);
-	var data = {username: user};
-	var template = Handlebars.compile(myInfo);
-  	var html = template(data);
-        
-	var dynamicTemp = 
-//$("#abb").html(dynamicTemp);
-$("#abb").html(html);
+function setUpMsg(user) {
+	window.name = user
+	var x = window.name
+	msgDisp(x)
+ 	//msgForm(x)
  
 } 
 </script>
