@@ -44,13 +44,14 @@ def getMessages(username):
 	for row in cursor:
 		print(row)
 		#print(row.keys())
-		requested = {'username':username}
-		requested.update(row2Dict(row))
-		data.append(requested)
+		#requested = {'username':username}
+		#requested.update(row2Dict(row))
+		#data.append(requested)
+		data.append(row2Dict(row))
         db.commit()
         db.close()
 	print("retreived msg")
-	print(requested)
+	#print(requested)
 	return data
 
 

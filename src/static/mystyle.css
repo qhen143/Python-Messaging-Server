@@ -82,14 +82,18 @@ div.Content {
     margin-left:5vw;
     width:75vw;
     height:90vh;
-    overflow-y:auto;	
+		overflow-y: auto;
 }
 
 
 div.Content div.msgScreen {
-	background-color:steelblue;
-	margin:1vh auto;
 	height: 75vh;
+	overflow-y: auto;
+
+	
+}
+
+div.Content div.fff {
 
 	overflow-y: auto;
 

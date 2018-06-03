@@ -28,6 +28,11 @@
 </div>
 
 <div class="Content" id = "abb">
+
+<div id="abc" class="fff"> </div>
+<div id="efg"> </div>
+
+<div id="def"> 
   <h3>Sticky Navigation Example</h3>
 
 <img src="static/pepe.png">
@@ -41,9 +46,10 @@
   <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
   <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
 </div>
-
+</div>
 <!--Setup online users to be display-->
   <script id = "userlistTemplate" type = "text/x-handlebars-template">  
+
 {{#each this}}
 <div>
 <a href="javascript:void(0);" onclick= "setUpMsg('{{USERNAME}}')">{{USERNAME}} : {{LASTLOGIN}} </a>
@@ -70,7 +76,10 @@ function loadUsers() {
 <!--Setup message display-->
  <script id = "msgDispTemplate" type = "text/x-handlebars-template"> 
 
-
+<div class =" msgScreen"> 
+<p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
+  <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
+>
 
 {{#each this}}
 
@@ -78,17 +87,10 @@ function loadUsers() {
 <p1>{{MESSAGE}} sent{{username}}@{{STAMP}}</p1>
 </div>
 
-{{#if @last}}
-<div id = "inputForm" class = "iForm">
-<form onSubmit="return sendMsg('{{username}}');">
-<input id="message" type="text" value= "a/s/l?" autofocus />
-<input type="submit" value="Send to {{username}}" />
-{{/if}}
-</form>
-</div>
+
 
 {{/each}} 
-
+</div>
 
 
 
@@ -97,23 +99,25 @@ function loadUsers() {
 
 <script>
 function msgDisp(user) {
+  $("#abc").html("");
   var myInfo = document.getElementById("msgDispTemplate").innerHTML;
   //var data = {username: "blank"};
   $.getJSON('/getMsgJSON?username='+user, function(data) {
 	console.log(data);
 	
 	var template = Handlebars.compile(myInfo);
-  	var html = template(data);
+  	var html = template(data, {'username':user});
         
 	//var dynamicTemp = 
 //$("#abb").html(dynamicTemp);
-$("#abb").html(html);
+
+$("#abc").html(html);
 });
  
 } 
 </script>
 
-<!--Setup input form for messages
+<!--Setup input form for messages-->
 <script id = "msgFormTemplate" type = "text/x-handlebars-template">  
 <div id = "inputForm" class = "iForm">
 <form onSubmit="return sendMsg('{{username}}');">
@@ -135,12 +139,12 @@ function msgForm(user) {
         
 	//var dynamicTemp = 
 //$("#abb").html(dynamicTemp);
-//$("#abb").html(html);
-document.getElementById('abb').innerHTML += html;
+$("#efg").html(html);
+//document.getElementById("efg").innerHTML += html;
  
 } 
 </script>
--->
+
 <script>
 function sendMsg(destination) {
   console.log("start")
@@ -166,10 +170,11 @@ return false;
 
 <script>
 function setUpMsg(user) {
+	$("#def").html("");
 	window.name = user
 	var x = window.name
 	msgDisp(x)
- 	//msgForm(x)
+ 	msgForm(x)
  
 } 
 </script>
