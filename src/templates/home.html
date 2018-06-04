@@ -91,13 +91,9 @@ function loadUsers() {
 <!--Setup message display-->
 <script id = "profileDispTemplate" type = "text/x-handlebars-template"> 
 
-<div class =" profileScreen"> 
-	<p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
- 	<p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-
 	<div class="profileContainer">
 		<p1>USERNAME:{{USERNAME}}</p1>
-<p1>FULLNAME:{{fullname}}</p1>
+<p1>FULLNAME:{{FULLNAME}}</p1>
 <p1>DESCRIPTION:{{DESCRIPTION}}</p1>
 <p1>LOCATION:{{LOCATION}}</p1>
 <p1>LASTUPDATED:{{LASTUPDATED}}</p1>
@@ -116,7 +112,6 @@ function profileDisp(user) {
   	var myInfo = document.getElementById("profileDispTemplate").innerHTML;
   	$.getJSON('/getProfileJS?profile_username='+user, function(data) {
 		console.log(data);
-	
 		var template = Handlebars.compile(myInfo);
   		var html = template(data);
 

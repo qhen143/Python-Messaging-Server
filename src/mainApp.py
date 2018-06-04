@@ -143,7 +143,7 @@ class MainApp(object):
 	self.updateProfile(profile_username)
 	#print("goodbye",self.getProfile(profile_username, cherrypy.session.get('username')))
 	#return self.getProfile(json.dumps({'profile_user':profile_username,'sender': cherrypy.session.get('username')}))
-	return json.dumps(dbLib.getProfile(profile_username))
+	return dbLib.getProfile(profile_username)
 
     @cherrypy.expose
     @cherrypy.tools.json_in()
