@@ -6,7 +6,7 @@ def initTables():
         cursor = db.cursor()
 	cursor.execute('''CREATE TABLE IF NOT EXISTS online(ID INTEGER PRIMARY KEY, USERNAME TEXT UNIQUE NOT NULL, IP TEXT NOT NULL, PKEY TEXT, LOCATION INTEGER, LASTLOGIN TEXT, PORT INTEGER NOT NULL)''')
 	cursor.execute('''CREATE TABLE IF NOT EXISTS messages(ID INTEGER PRIMARY KEY, SENDER TEXT NOT NULL, DESTINATION TEXT NOT NULL, MESSAGE TEXT, STAMP TEXT, ENC INTEGER, ENCRYPTION INTEGER, HASHING INTEGER, HASH TEXT, DECRYPTIONKEY TEXT, GROUPID TEXT)''')
-	cursor.execute('''CREATE TABLE IF NOT EXISTS files(ID INTEGER PRIMARY KEY, SENDER TEXT NOT NULL, DESTINATION TEXT NOT NULL, FILE TEXT, CONTENT_TYPE TEXT, STAMP TEXT, ENC INTEGER, ENCRYPTION INTEGER, HASHING INTEGER, HASH TEXT, DECRYPTIONKEY TEXT, GROUPID TEXT)''')
+	cursor.execute('''CREATE TABLE IF NOT EXISTS files(ID INTEGER PRIMARY KEY, SENDER TEXT NOT NULL, DESTINATION TEXT NOT NULL, FILE TEXT, FILENAME TEXT, CONTENT_TYPE TEXT, STAMP TEXT, ENC INTEGER, ENCRYPTION INTEGER, HASHING INTEGER, HASH TEXT, DECRYPTIONKEY TEXT, GROUPID TEXT)''')
 	cursor.execute('''CREATE TABLE IF NOT EXISTS profile(USERNAME TEXT UNIQUE PRIMARY KEY, FULLNAME TEXT, POSITION TEXT, DESCRIPTION TEXT, LOCATION TEXT, LASTUPDATED TEXT NOT NULL, PICTURE TEXT, ENC INTEGER, ENCRYPTION INTEGER, DECRYPTIONKEY TEXT )''')
         db.commit()
         db.close()
@@ -52,6 +52,36 @@ def insertMessage(parameters):
         db.commit()
         db.close()
 	print("saved msg")
+
+def insertFile(parameters):
+	db = sqlite3.connect('db/clientData')
+        cursor = db.cursor()
+	cursor.execute('''INSERT INTO files(sender, destination, file, filename, content_type, stamp, enc, encryption, hashing, hash, decryptionKey, groupID)
+                 VALUES(?,?,?,?,?,?,?,?,?,?,?,?)''', parameters)
+        db.commit()
+        db.close()
+	print("saved file")
+
+def getFile(username):
+	db = sqlite3.connect('db/clientData')
+	db.row_factory = sqlite3.Row
+        cursor = db.cursor()
+	cursor.execute('''SELECT sender, destination, file, filename, content_type, stamp FROM files where sender = ? OR destination = ? ORDER BY stamp ASC''', [username,username])
+	data = []
+	print(cursor)
+	
+	for row in cursor:
+		print(row)
+		#print(row.keys())
+		#requested = {'username':username}
+		#requested.update(row2Dict(row))
+		#data.append(requested)
+		data.append(row2Dict(row))
+        db.commit()
+        db.close()
+	print("retreived file")
+	#print(requested)
+	return data
 
 def getMessages(username):
 	db = sqlite3.connect('db/clientData')

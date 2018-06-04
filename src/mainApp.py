@@ -88,6 +88,11 @@ class MainApp(object):
 	return Page
 
     @cherrypy.expose
+    def file(self):
+	Page = open("./templates/file.html").read()
+	return Page    
+
+    @cherrypy.expose
     def logout(self):
         Page = '<form action="/signout">'
         Page += '<input type="submit" value="signout"/></form>'
@@ -115,11 +120,42 @@ class MainApp(object):
 	return {'status':0}
 	
     @cherrypy.expose
+    def sendFile(self, sender, destination, file1, filename, content_type, stamp, encoding=0, encryption = '0', hashing = 0, hash = None, decryptionKey = None , groupID = None):
+	#print("-------------------"+file1+"------------------")
+	#print("@@@@@@@@@@@"+param+"@@@@@@@@@@@@@")
+	print("@@@@@@@@@@@"+destination+"@@@@@@@@@@@@@")
+	print("@@@@@@@@@@@"+filename+"@@@@@@@@@@@@@")
+	print("@@@@@@@@@@@"+content_type+"@@@@@@@@@@@@@")
+	print("@@@@@@@@@@@"+stamp+"@@@@@@@@@@@@@")
+	#print("@@@@@@@@@@@"+file1+"@@@@@@@@@@@@@")
+	#print("@@@@@@@@@@@"+encryption+"@@@@@@@@@@@@@")
+	print("@@@@@@@@@@@"+sender+"@@@@@@@@@@@@@")
+	url = dbLib.getUserAddress(destination) + "/receiveFile"
+	
+	#print("")
+        stamp = str(time.time())
+	key = ['sender', 'destination','file', 'filename', 'content_type', 'stamp', 'encoding', 'encryption', 'hashing', 'hash', 'decryptionKey', 'groupID' ]
+	param = [cherrypy.session.get('username'), destination, file1, filename, content_type, stamp, encoding, encryption, hashing, hash, decryptionKey, groupID ]
+
+	data = collections.OrderedDict(zip(key,param))
+	print(data)
+        data = json.dumps(data)
+        request = urllib2.Request(url,data, {'Content-Type': 'application/json'})
+
+        print(request)#remove later
+
+        error = urllib2.urlopen(request, timeout = 15)
+	print("@@@@@@@@@@@@@@@@@")
+        print(error.read())#remove later
+	print("@@@@@@@@@@@@@@@@@")
+	dbLib.insertFile(param)
+
+    @cherrypy.expose
     def sendMessage(self, sender, destination, message, stamp, encoding=0, encryption = '0', hashing = 0, hash = None, decryptionKey = None , groupID = None):
 
 	url = dbLib.getUserAddress(destination) + "/receiveMessage"
 
-        stamp = str(time.time())
+        stamp = time.time()
 
 	key = ['sender', 'destination','message', 'stamp', 'encoding', 'encryption', 'hashing', 'hash', 'decryptionKey', 'groupID' ]
 	param = [sender, destination,message, stamp, encoding, encryption, hashing, hash, decryptionKey, groupID ]
@@ -130,7 +166,7 @@ class MainApp(object):
 
         print(request)#remove later
 
-        error = urllib2.urlopen(request, timeout = 7.0,)
+        error = urllib2.urlopen(request, timeout = 7.0)
 
         print(error.read())#remove later
 
@@ -143,13 +179,13 @@ class MainApp(object):
         data = cherrypy.request.json
 
 	try:
-            param = tuple([data['sender'],data['destination'],data['file'],data['stamp'],data['content_type'],data['encryption'],data['hashing'],data['hash'],data['decryptionKey'],data['groupID']])
+            param = tuple([data['sender'],data['destination'],data['file'],data['filename'],data['stamp'],data['content_type'],data['encryption'],data['hashing'],data['hash'],data['decryptionKey'],data['groupID']])
 	    print(param)
 
 	except KeyError:
-	    param = tuple([data['sender'],data['destination'],data['file'],data['stamp'], data['content_type'], '0', '0', None, None , None])
+	    param = tuple([data['sender'],data['destination'],data['file'],data['filename'],data['stamp'], data['content_type'], '0', '0', None, None , None])
         
-	#dbLib.insertMessage(param)
+	dbLib.insertFile(param)
 	return '0'
 
     #NEED TO RETEST
@@ -201,7 +237,7 @@ class MainApp(object):
 
         print(request)#remove later
 	try:
-            data = urllib2.urlopen(request, timeout = 10.0).read()
+            data = urllib2.urlopen(request, timeout = 7.0).read()
 	    print("lllll",data)
 	    data = json.loads(data)
 	    print(data)

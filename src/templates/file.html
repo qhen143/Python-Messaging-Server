@@ -128,13 +128,79 @@ function msgDisp(user) {
 <!--Setup input form for messages-->
 <script id = "msgFormTemplate" type = "text/x-handlebars-template">  
 <div id = "inputForm" class = "iForm">
-	<form onSubmit="return sendMsg('{{username}}');">
-	<input id="message" type="text" value= "a/s/l?" autofocus />
-	<input type="submit" value="Send to {{username}}" />
-	</form>
+
+	<form method="post" enctype="multipart/form-data" onSubmit = "return test();">
+  <div>
+    <label for="file_uploads">Choose a file to upload</label>
+    <input type="file" id="file_upload" name="file_upload">
+  </div>
+  <div class="preview">
+    <p>No files currently selected for upload</p>
+  </div>
+  <div>
+    <button>Submit</button>
+  </div>
+</form>
 
 
 </div>
+</script>
+
+<script>
+function test() {
+
+$.getJSON('/getSessionUserJSON', function(data) {
+		console.log(data);
+		var sender = data.USERNAME;
+var file = document.getElementById("file_upload").files[0];
+readFile(file,sender);
+});
+
+
+return false;
+}
+</script>
+
+<script>
+function readFile(file,sender) {
+var name = file.name;
+var size = returnFileSize(file.size);
+var mime = file.type;
+   var reader = new FileReader();
+   reader.readAsDataURL(file);
+   reader.onload = function () {
+     var b64 = reader.result;
+	b64 = b64.substr(reader.result.indexOf(',') + 1)
+	
+     console.log(b64);
+	
+$.getJSON('/sendFile?sender='+sender+'&destination='+window.name+'&file1='+b64.replaceAll(' ', '+')+'&filename='+name+'&content_type='+mime+'&stamp=""', function(data) {});
+	console.log("help");
+	setUpMsg(window.name);
+   };
+
+   reader.onerror = function (error) {
+     console.log('Error: ', error);
+     return "error";
+   };
+
+console.log(file);
+console.log(name);
+console.log(size);
+console.log(mime);
+}
+</script>
+
+<script>
+function returnFileSize(number) {
+  if(number < 1024) {
+    return number + 'bytes';
+  } else if(number >= 1024 && number < 1048576) {
+    return (number/1024).toFixed(1) + 'KB';
+  } else if(number >= 1048576) {
+    return (number/1048576).toFixed(1) + 'MB';
+  }
+}
 </script>
 
 <script>
