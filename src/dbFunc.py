@@ -6,6 +6,7 @@ def initTables():
         cursor = db.cursor()
 	cursor.execute('''CREATE TABLE IF NOT EXISTS online(ID INTEGER PRIMARY KEY, USERNAME TEXT UNIQUE NOT NULL, IP TEXT NOT NULL, PKEY TEXT, LOCATION INTEGER, LASTLOGIN TEXT, PORT INTEGER NOT NULL)''')
 	cursor.execute('''CREATE TABLE IF NOT EXISTS messages(ID INTEGER PRIMARY KEY, SENDER TEXT NOT NULL, DESTINATION TEXT NOT NULL, MESSAGE TEXT, STAMP TEXT, ENC INTEGER, ENCRYPTION INTEGER, HASHING INTEGER, HASH TEXT, DECRYPTIONKEY TEXT, GROUPID TEXT)''')
+	cursor.execute('''CREATE TABLE IF NOT EXISTS files(ID INTEGER PRIMARY KEY, SENDER TEXT NOT NULL, DESTINATION TEXT NOT NULL, FILE TEXT, CONTENT_TYPE TEXT, STAMP TEXT, ENC INTEGER, ENCRYPTION INTEGER, HASHING INTEGER, HASH TEXT, DECRYPTIONKEY TEXT, GROUPID TEXT)''')
 	cursor.execute('''CREATE TABLE IF NOT EXISTS profile(USERNAME TEXT UNIQUE PRIMARY KEY, FULLNAME TEXT, POSITION TEXT, DESCRIPTION TEXT, LOCATION TEXT, LASTUPDATED TEXT NOT NULL, PICTURE TEXT, ENC INTEGER, ENCRYPTION INTEGER, DECRYPTIONKEY TEXT )''')
         db.commit()
         db.close()
@@ -14,7 +15,7 @@ def initUserList(userList):
 	db = sqlite3.connect('db/clientData')
         cursor = db.cursor()
 	for user in userList:
-		cursor.execute(''' INSERT OR REPLACE INTO profile(username, fullname, position, description, location, lastupdated, picture, enc, encryption, decryptionKey) VALUES(?,?,?,?,?,?,?,?,?,?)''', [user, 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', "imgur.com/a/FrbMAY5", 0, 0, None])
+		cursor.execute(''' INSERT OR IGNORE INTO profile(username, fullname, position, description, location, lastupdated, picture, enc, encryption, decryptionKey) VALUES(?,?,?,?,?,?,?,?,?,?)''', [user, 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', "imgur.com/a/FrbMAY5", 0, 0, None])
 	db.commit()
         db.close()
 

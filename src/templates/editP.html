@@ -6,7 +6,7 @@
 <title> w0w </title>
 </head>
 
-<body onload = "loadUsers()">
+<body onload = "loadSession()">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="static/handlebars-v4.0.11.js"></script>
 
@@ -25,12 +25,6 @@
 
   	<h>W33D Wizard</h>
   	<img src="static/pepe.png">
-</div>
-
-
-<!--Vertical Userlist------------------------------>
-<div class="Userlist" id = "Users" >
-
 </div>
 
 
@@ -61,61 +55,75 @@
 	</div>
 </div>
 
-
-<!--Setup online users to be display-->
-<script id = "userlistTemplate" type = "text/x-handlebars-template">  
-
-	{{#each this}}
-	<div>
-		<a href="javascript:void(0);" onclick= "setUpMsg('{{USERNAME}}')">{{USERNAME}} : {{LASTLOGIN}} </a>
-	</div>
-	{{/each}}
-</script>
-
 <script>
-function loadUsers() {
- 	var myInfo = document.getElementById("userlistTemplate").innerHTML;
-  
-	$.getJSON('/getAllUsersJSON', function(data) {
+function loadSession() {
+
+	$.getJSON('/getSessionUserJSON', function(data) {
 		console.log(data);
-	
-		var template = Handlebars.compile(myInfo);
-  		var html = template(data);
- 
-  		$("#Users").append(html);});
-	$.getJSON('/onlineJSON', function(data) {
-		console.log(data);});
-	
+		setUpEdit(data.USERNAME);});
 } 
 </script>
 
 
 
+
 <!--Setup message display-->
-<script id = "msgDispTemplate" type = "text/x-handlebars-template"> 
+<script id = "editProfileTemplate" type = "text/x-handlebars-template"> 
 
-<div class =" msgScreen"> 
-	<p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
- 	<p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
+	<div class="profileContainer">
+<p9 id = "currentUser" value ={{USERNAME}}> xX{{USERNAME}}420Xx </p9>
 
+	<form onSubmit="return updateProfile();">
 
-	{{#each this}}
+	<label for="fullname"><b>Full Name</b></label>
+	<input id="fullname" type="text" value= "{{FULLNAME}}"  />
 
-	<div class="msgContainer">
-		<p1><b>{{SENDER}}</b>: {{MESSAGE}} <i>sent@{{STAMP}}</i></p1>
+	<label for="position"><b>Position</b></label>
+	<input id="position" type="text" value= "{{POSITION}}"  />
+
+	<label for="description"><b>Description</b></label>
+	<input id="description" type="text" value= "{{DESCRIPTION}}"  />
+
+	<label for="location"><b>Location</b></label>
+	<input id="location" type="text" value= "{{LOCATION}}" />
+
+	<label for="picture"><b>Picture URL</b></label>
+	<input id="picture" type="text" value= "{{PICTURE}}" />
+
+	<input type="submit" value="Update Profile" />
+	</form>
 	</div>
 
-	{{/each}} 
-</div>
 </script>
 
 <script>
-function msgDisp(user) {
+function updateProfile() {
+	var username = window.name;
+	console.log(username);
+	var fullname = document.getElementById('fullname').value;
+	console.log(fullname);
+	var position = document.getElementById('position').value;
+console.log(position);
+	var description = document.getElementById('description').value;
+console.log(description);
+	var location = document.getElementById('location').value;
+console.log(location);
+	var picture = document.getElementById('picture').value;
+console.log(picture);
+	$.getJSON('/profileEdit?profile_username='+username+'&fullname='+fullname+'&position='+position+'&description='+description+'&location='+location+'&picture='+picture, function(data) {
+	console.log()});
+	setUpEdit(username);
+	$("#abc").html("<p> successfully updated</p>");
+return false;
+} 
+</script>
+
+<script>
+function editProfileDisp(user) {
  	$("#abc").html("");
-  	var myInfo = document.getElementById("msgDispTemplate").innerHTML;
-  	$.getJSON('/getMsgJSON?username='+user, function(data) {
+  	var myInfo = document.getElementById("editProfileTemplate").innerHTML;
+  	$.getJSON('/getProfileJS?profile_username='+user, function(data) {
 		console.log(data);
-	
 		var template = Handlebars.compile(myInfo);
   		var html = template(data);
 
@@ -125,51 +133,12 @@ function msgDisp(user) {
 } 
 </script>
 
-<!--Setup input form for messages-->
-<script id = "msgFormTemplate" type = "text/x-handlebars-template">  
-<div id = "inputForm" class = "iForm">
-	<form onSubmit="return sendMsg('{{username}}');">
-	<input id="message" type="text" value= "a/s/l?" autofocus />
-	<input type="submit" value="Send to {{username}}" />
-	</form>
-</div>
-</script>
-
 <script>
-function msgForm(user) {
-	var myInfo = document.getElementById("msgFormTemplate").innerHTML;
-  
-	var data = {username: user};
-	var template = Handlebars.compile(myInfo);
-  	var html = template(data);
-        
-	$("#efg").html(html);
-} 
-</script>
-
-<script>
-function sendMsg(destination) {
-	console.log("start");
-	console.log(destination)
-	var response = document.getElementById('message').value;
-  	console.log(response);
-  	$.getJSON('/msgJS?destination='+destination+'&message='+response, function(data) {});
-	console.log("help");
-	setUpMsg(window.name);
-	return false;
-} 
-</script>
-
-
-
-
-<script>
-function setUpMsg(user) {
+function setUpEdit(user) {
 	$("#def").html("");
 	window.name = user;
 	var x = window.name;
-	msgDisp(x);
- 	msgForm(x);
+	editProfileDisp(x);
  
 } 
 </script>

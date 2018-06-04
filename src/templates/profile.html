@@ -16,11 +16,9 @@
 
 <!--Navigation Bar-------------------------------->
 <div class="NavBar">
- 	<img src="static/pepe.png">
- 	<a class="active" href="/home">Profile</a>
+ 	<a class="active" href="/home">Home</a>
+ 	<a href="/home">Profile</a>
  	<a href="/messaging">Messenger</a>
- 	<a href="/file">Files</a>
-	<a href="/editP">Edit Profile</a>
  	<a href="/logout">Sign Out</a>
 
   	<h>W33D Wizard</h>
@@ -67,7 +65,7 @@
 
 	{{#each this}}
 	<div>
-		<a href="javascript:void(0);" onclick= "setUpMsg('{{USERNAME}}')">{{USERNAME}} : {{LASTLOGIN}} </a>
+		<a href="javascript:void(0);" onclick= "setUpProfile('{{USERNAME}}')">{{USERNAME}} </a>
 	</div>
 	{{/each}}
 </script>
@@ -76,7 +74,7 @@
 function loadUsers() {
  	var myInfo = document.getElementById("userlistTemplate").innerHTML;
   
-	$.getJSON('/getAllUsersJSON', function(data) {
+  	$.getJSON('/getAllUsersJSON', function(data) {
 		console.log(data);
 	
 		var template = Handlebars.compile(myInfo);
@@ -85,37 +83,35 @@ function loadUsers() {
   		$("#Users").append(html);});
 	$.getJSON('/onlineJSON', function(data) {
 		console.log(data);});
-	
 } 
 </script>
 
 
 
 <!--Setup message display-->
-<script id = "msgDispTemplate" type = "text/x-handlebars-template"> 
+<script id = "profileDispTemplate" type = "text/x-handlebars-template"> 
 
-<div class =" msgScreen"> 
-	<p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
- 	<p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-
-
-	{{#each this}}
-
-	<div class="msgContainer">
-		<p1><b>{{SENDER}}</b>: {{MESSAGE}} <i>sent@{{STAMP}}</i></p1>
+	<div class="profileContainer">
+		<p1>USERNAME:{{USERNAME}}</p1>
+<p1>FULLNAME:{{FULLNAME}}</p1>
+<p1>DESCRIPTION:{{DESCRIPTION}}</p1>
+<p1>LOCATION:{{LOCATION}}</p1>
+<p1>LASTUPDATED:{{LASTUPDATED}}</p1>
+<p1>POSITION:{{POSITION}}</p1>
+<p1>ENC:{{ENC}}</p1>
+<p1>ENCRYPTION:{{ENCRYPTION}}</p1>
+<p1>DECRYPTIONKEY{{DECRYPTIONKEY}}</p1>
 	</div>
 
-	{{/each}} 
 </div>
 </script>
 
 <script>
-function msgDisp(user) {
+function profileDisp(user) {
  	$("#abc").html("");
-  	var myInfo = document.getElementById("msgDispTemplate").innerHTML;
-  	$.getJSON('/getMsgJSON?username='+user, function(data) {
+  	var myInfo = document.getElementById("profileDispTemplate").innerHTML;
+  	$.getJSON('/getProfileJS?profile_username='+user, function(data) {
 		console.log(data);
-	
 		var template = Handlebars.compile(myInfo);
   		var html = template(data);
 
@@ -125,51 +121,12 @@ function msgDisp(user) {
 } 
 </script>
 
-<!--Setup input form for messages-->
-<script id = "msgFormTemplate" type = "text/x-handlebars-template">  
-<div id = "inputForm" class = "iForm">
-	<form onSubmit="return sendMsg('{{username}}');">
-	<input id="message" type="text" value= "a/s/l?" autofocus />
-	<input type="submit" value="Send to {{username}}" />
-	</form>
-</div>
-</script>
-
 <script>
-function msgForm(user) {
-	var myInfo = document.getElementById("msgFormTemplate").innerHTML;
-  
-	var data = {username: user};
-	var template = Handlebars.compile(myInfo);
-  	var html = template(data);
-        
-	$("#efg").html(html);
-} 
-</script>
-
-<script>
-function sendMsg(destination) {
-	console.log("start");
-	console.log(destination)
-	var response = document.getElementById('message').value;
-  	console.log(response);
-  	$.getJSON('/msgJS?destination='+destination+'&message='+response, function(data) {});
-	console.log("help");
-	setUpMsg(window.name);
-	return false;
-} 
-</script>
-
-
-
-
-<script>
-function setUpMsg(user) {
+function setUpProfile(user) {
 	$("#def").html("");
 	window.name = user;
 	var x = window.name;
-	msgDisp(x);
- 	msgForm(x);
+	profileDisp(x);
  
 } 
 </script>

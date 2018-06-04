@@ -83,11 +83,30 @@ class MainApp(object):
 	return Page
 
     @cherrypy.expose
+    def editP(self):
+	Page = open("./templates/editP.html").read()
+	return Page
+
+    @cherrypy.expose
     def logout(self):
         Page = '<form action="/signout">'
         Page += '<input type="submit" value="signout"/></form>'
         return Page
     
+    @cherrypy.expose
+    def profileEdit(self, profile_username, fullname, position, description, location, picture):
+	data = {'fullname': fullname, 'position':position, 'description':description, 'location':location, 'picture':picture, 'encoding': 0, 'encryption':0, "decryptionKey":None , "lastUpdated":time.time()}
+	dbLib.updateProfile(data,profile_username)
+	print("yaasssss")
+	return json.dumps({"test":0})
+	#return self.editP()
+	
+
+    @cherrypy.expose
+    @cherrypy.tools.json_out()
+    def getSessionUserJSON(self):
+	return {'USERNAME': cherrypy.session.get('username')}
+
     @cherrypy.expose
     @cherrypy.tools.json_out()
     def msgJS(self,destination,message):
@@ -111,11 +130,27 @@ class MainApp(object):
 
         print(request)#remove later
 
-        error = urllib2.urlopen(request)
+        error = urllib2.urlopen(request, timeout = 7.0,)
 
         print(error.read())#remove later
 
 	dbLib.insertMessage(param)
+	
+     #NEED TO RETEST
+    @cherrypy.expose
+    @cherrypy.tools.json_in()
+    def receiveFile(self):
+        data = cherrypy.request.json
+
+	try:
+            param = tuple([data['sender'],data['destination'],data['file'],data['stamp'],data['content_type'],data['encryption'],data['hashing'],data['hash'],data['decryptionKey'],data['groupID']])
+	    print(param)
+
+	except KeyError:
+	    param = tuple([data['sender'],data['destination'],data['file'],data['stamp'], data['content_type'], '0', '0', None, None , None])
+        
+	#dbLib.insertMessage(param)
+	return '0'
 
     #NEED TO RETEST
     @cherrypy.expose
@@ -143,6 +178,7 @@ class MainApp(object):
 	self.updateProfile(profile_username)
 	#print("goodbye",self.getProfile(profile_username, cherrypy.session.get('username')))
 	#return self.getProfile(json.dumps({'profile_user':profile_username,'sender': cherrypy.session.get('username')}))
+	print("queeeen")
 	return dbLib.getProfile(profile_username)
 
     @cherrypy.expose
@@ -161,15 +197,18 @@ class MainApp(object):
 	url = dbLib.getUserAddress(username) + "/getProfile"
 	param = {'profile_username':username , 'sender': cherrypy.session.get('username')}
         param = json.dumps(param)
-        request = urllib2.Request(url,param, {'Content-Type': 'application/json'})
+        request = urllib2.Request(url,param,{'Content-Type': 'application/json'} )
 
         print(request)#remove later
-
-        data = urllib2.urlopen(request).read()
-	print("lllll",data)
-	data = json.loads(data)
-	print(data)
-	dbLib.updateProfile(data, username)
+	try:
+            data = urllib2.urlopen(request, timeout = 10.0).read()
+	    print("lllll",data)
+	    data = json.loads(data)
+	    print(data)
+	    dbLib.updateProfile(data, username)
+	except urllib2.URLError as e:
+            print ('Connection timeout')
+	    print e
 	
 
 
