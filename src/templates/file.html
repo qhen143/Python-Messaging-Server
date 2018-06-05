@@ -174,7 +174,7 @@ var mime = file.type;
 	
      console.log(b64);
 	
-$.getJSON('/sendFile?sender='+sender+'&destination='+window.name+'&file1='+b64.replaceAll(' ', '+')+'&filename='+name+'&content_type='+mime+'&stamp=""', function(data) {});
+$.getJSON('/sendFile?sender='+sender+'&destination='+window.name+'&file1='+b64+'&filename='+name+'&content_type='+mime+'&stamp=abc', function(data) {});
 	console.log("help");
 	setUpMsg(window.name);
    };

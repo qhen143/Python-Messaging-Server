@@ -137,7 +137,9 @@ def getProfile(username):
 	cursor.execute('''SELECT username, lastupdated, fullname, position, description, location, picture, enc, encryption, decryptionKey FROM profile where username = ?''', [username])
 	row = cursor.fetchone()
 	print("oooooo",row)
-	data = row2Dict(row)
+	keys = ['username', "lastUpdated", 'fullname', 'position', 'description', 'location', 'picture', 'encoding', 'encryption', "decryptionKey"]	
+	data = dict(zip(keys,row))
+#	data = row2Dict(row)
 	print(data)
 	db.commit()
         db.close()
@@ -146,13 +148,19 @@ def getProfile(username):
 
 def updateProfile(data,username):
 	db = sqlite3.connect('db/clientData')
-	db.row_factory = sqlite3.Row
+	#db.row_factory = sqlite3.Row
         cursor = db.cursor()
+	print("pppppppppppppppppppp")
+	print(data)
+        print(username)
+	print(type(data))
+	data = dict(data)
+	print(type(data))
 	info = [str(data.get('lastUpdated',None)), data.get('fullname',), data.get('position',None), data.get('description',None), data.get('location',None), data.get('picture',None), data.get('encoding',None), data.get('encryption',None), data.get('decryptionKey',None), username ]
-	cursor.execute('''UPDATE profile SET lastupdated = ?, fullname = ?, position = ?, description = ?, location = ?, picture = ?, enc = ?, encryption = ?, decryptionKey = ? WHERE username = ? ''',
- info)
-	#row = cursor.fetchone()
-	#print("papapapapa",row)
+	print(info)
+	cursor.execute('''UPDATE profile SET lastUpdated = ?, fullname = ?, position = ?, description = ?, location = ?, picture = ?, enc = ?, encryption = ?, decryptionKey = ? WHERE USERNAME = ? ''', info)
+	row = cursor.fetchone()
+	print("papapapapa",row)
 	#data = row2Dict(row)
 	db.commit()
         db.close()

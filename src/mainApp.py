@@ -101,6 +101,12 @@ class MainApp(object):
     @cherrypy.expose
     def profileEdit(self, profile_username, fullname, position, description, location, picture):
 	data = {'fullname': fullname, 'position':position, 'description':description, 'location':location, 'picture':picture, 'encoding': 0, 'encryption':0, "decryptionKey":None , "lastUpdated":time.time()}
+	print("asasasasasasasas")	
+	print(data)	
+	data = json.dumps(data)
+	data = json.loads(data)
+	print("mmmmmmmmmmmmm")
+	print(data)
 	dbLib.updateProfile(data,profile_username)
 	print("yaasssss")
 	return json.dumps({"test":0})
@@ -179,11 +185,11 @@ class MainApp(object):
         data = cherrypy.request.json
 
 	try:
-            param = tuple([data['sender'],data['destination'],data['file'],data['filename'],data['stamp'],data['content_type'],data['encryption'],data['hashing'],data['hash'],data['decryptionKey'],data['groupID']])
+            param = tuple([data['sender'],data['destination'],data['file'],data['filename'],data['content_type'], data['stamp'], data['encoding'], data['encryption'],data['hashing'],data['hash'],data['decryptionKey'],data['groupID']])
 	    print(param)
 
 	except KeyError:
-	    param = tuple([data['sender'],data['destination'],data['file'],data['filename'],data['stamp'], data['content_type'], '0', '0', None, None , None])
+	    param = tuple([data['sender'],data['destination'],data['file'],data['filename'], data['content_type'], data['stamp'],'0', '0', '0', None, None , None])
         
 	dbLib.insertFile(param)
 	return '0'
@@ -206,7 +212,8 @@ class MainApp(object):
         
     @cherrypy.expose    
     def ping(self, sender):
-        return 0
+        print("0")
+        return "0"
     
     @cherrypy.expose
     @cherrypy.tools.json_out()
@@ -230,6 +237,7 @@ class MainApp(object):
 	
     @cherrypy.expose
     def updateProfile(self, username):
+	print(username)
 	url = dbLib.getUserAddress(username) + "/getProfile"
 	param = {'profile_username':username , 'sender': cherrypy.session.get('username')}
         param = json.dumps(param)
@@ -318,7 +326,7 @@ class MainApp(object):
 #B3FCE8CFCA6465845E55964425D585E874818DC351037B88858C413CECAEDB19
 	hash1 = hashlib.sha256(password+username).hexdigest()
 	
-	#ip = socket.gethostbyname(socket.gethostname())
+	ip = socket.gethostbyname(socket.gethostname())
 	
 	#s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         #s.connect(("8.8.8.8", 80))
@@ -326,9 +334,9 @@ class MainApp(object):
         #print(s.getsockname()[0])
         #s.close()
 
-	ip = urllib2.urlopen('http://ip.42.pl/raw').read()
+	#ip = urllib2.urlopen('http://ip.42.pl/raw').read()
 	print ip
-        test = urllib.urlopen("http://cs302.pythonanywhere.com/report?username=" + username+"&password="+ hash1+"&location=2&ip="+ip+"&port="+str(listen_port)+"&enc=0")
+        test = urllib.urlopen("http://cs302.pythonanywhere.com/report?username=" + username+"&password="+ hash1+"&location=0&ip="+ip+"&port="+str(listen_port)+"&enc=0")
 	output = test.read().decode('utf-8')
 	print output
         print username
