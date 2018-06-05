@@ -3,238 +3,160 @@
 <link rel="stylesheet" type="text/css" href="static/mystyle.css">
 
 <head>
-<title> w0w </title>
+    <title> w0w </title>
 </head>
 
-<body onload = "loadUsers()">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="static/handlebars-v4.0.11.js"></script>
+<body onload="loadUsers()">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="static/handlebars-v4.0.11.js"></script>
 
-<div class="Header">
-</div>
-
-
-<!--Navigation Bar-------------------------------->
-<div class="NavBar">
- 	<img src="static/pepe.png">
- 	<a class="active" href="/home">Profile</a>
- 	<a href="/messaging">Messenger</a>
- 	<a href="/file">Files</a>
-	<a href="/editP">Edit Profile</a>
- 	<a href="/logout">Sign Out</a>
-
-  	<h>W33D Wizard</h>
-  	<img src="static/pepe.png">
-</div>
+    <div class="Header">
+    </div>
 
 
-<!--Vertical Userlist------------------------------>
-<div class="Userlist" id = "Users" >
-
-</div>
-
-
-<!--Main body of the page-------------------------->
-<div class="Content" id = "abb">
-
-	<!--Messages are displayed here-------------------->
-	<div id="abc" class="fff"> </div>
-
-	<!--Message form is displayed here----------------->
-	<div id="efg"> </div>
-
-	<!--Default text goes here-------------------->
-	<div id="def"> 
-		<h3>Sticky Navigation Example</h3>
-
-		<img src="static/pepe.png">
-  		<p>The navbar will stick to the top when you reach its scroll position.</p>
-
-  		<p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.
-		</p>
-  <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-  <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-  <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-  <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-  <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-  <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-	</div>
-</div>
+    <!--Navigation Bar-------------------------------->
+    <div class="NavBar">
+        <img src="static/pepe.png">
+        <h>Connecc</h>
+        <a href="/logout">Sign Out    </a>
+        <a href="/editP">Edit Profile</a>
+        <a class="active" href="/file">Files       </a>
+        <a href="/messaging">Messenger   </a>
+        <a href="/home">Profile     </a>
+    </div>
 
 
-<!--Setup online users to be display-->
-<script id = "userlistTemplate" type = "text/x-handlebars-template">  
+    <!--Vertical Userlist------------------------------>
+    <div class="Userlist" id="Users">
 
-	{{#each this}}
-	<div>
-		<a href="javascript:void(0);" onclick= "setUpMsg('{{USERNAME}}')">{{USERNAME}} : {{LASTLOGIN}} </a>
-	</div>
-	{{/each}}
-</script>
-
-<script>
-function loadUsers() {
- 	var myInfo = document.getElementById("userlistTemplate").innerHTML;
-  
-	$.getJSON('/getAllUsersJSON', function(data) {
-		console.log(data);
-	
-		var template = Handlebars.compile(myInfo);
-  		var html = template(data);
- 
-  		$("#Users").append(html);});
-	$.getJSON('/onlineJSON', function(data) {
-		console.log(data);});
-	
-} 
-</script>
+    </div>
 
 
+    <!--Main body of the page-------------------------->
+    <div class="Content" id="Content">
 
-<!--Setup message display-->
-<script id = "msgDispTemplate" type = "text/x-handlebars-template"> 
+        <!--Messages are displayed here-------------------->
+        <div id="fileDisp" class="fileDisp"> </div>
 
-<div class =" msgScreen"> 
-	<p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
- 	<p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
+        <!--Message form is displayed here----------------->
+        <div id="fileInput"> </div>
 
-
-	{{#each this}}
-
-	<div class="msgContainer">
-		<p1><b>{{SENDER}}</b>: {{MESSAGE}} <i>sent@{{STAMP}}</i></p1>
-	</div>
-
-	{{/each}} 
-</div>
-</script>
-
-<script>
-function msgDisp(user) {
- 	$("#abc").html("");
-  	var myInfo = document.getElementById("msgDispTemplate").innerHTML;
-  	$.getJSON('/getMsgJSON?username='+user, function(data) {
-		console.log(data);
-	
-		var template = Handlebars.compile(myInfo);
-  		var html = template(data);
-
-	$("#abc").html(html);
-});
- 
-} 
-</script>
-
-<!--Setup input form for messages-->
-<script id = "msgFormTemplate" type = "text/x-handlebars-template">  
-<div id = "inputForm" class = "iForm">
-
-	<form method="post"  enctype="multipart/form-data" form action= "/sendFile?sender=x&destination={{username}}">
-  <div>
-    <label for="file_uploads">Choose a file to upload</label>
-    <input type="file" id="file1" name="file1">
-	<input type="submit" value="Send File" />
-  </div>
-  <div class="preview">
-    <p>No files currently selected for upload</p>
-  </div>
-  <div>
-    <button>Submit</button>
-  </div>
-</form>
+        <!--Default text goes here-------------------->
+        <div id="default">
+            <img src="https://media1.tenor.com/images/db85ba00c6073b451a8f05156a66524e/tenor.gif?itemid=9856796"></img>
+        </div>
+    </div>
 
 
-</div>
-</script>
+    <!--Setup online users to be display-->
+    <script id="userlistTemplate" type="text/x-handlebars-template">
 
-<script>
-function test() {
+        {{#each this}}
+        <div>
+            <a href="javascript:void(0);" onclick="setUpMsg('{{USERNAME}}')">{{USERNAME}} </a>
+	<p10> {{ONLINE}}</p10>
+        </div>
+        {{/each}}
+    </script>
 
-$.getJSON('/getSessionUserJSON', function(data) {
-		console.log(data);
-		var sender = data.USERNAME;
-var file = document.getElementById("file_upload").files[0];
-//var file = document.getElementById("file_upload");
-readFile(file,sender);
-});
+    <script>
+        function loadUsers() {
+            var myInfo = document.getElementById("userlistTemplate").innerHTML;
 
+            $.getJSON('/onlineJSON', function(data) {
 
-return false;
-}
-</script>
+                var template = Handlebars.compile(myInfo);
+                var html = template(data);
 
-<script>
-function readFile(file,sender) {
-//var name = file.name;
-//var size = returnFileSize(file.size);
-//var mime = file.type;
-//   var reader = new FileReader();
-//   reader.readAsDataURL(file);
-//   reader.onload = function () {
-//     var b64 = reader.result;
-//	b64 = b64.substr(reader.result.indexOf(',') + 1)
-	
-//     console.log(b64);
-console.log(file);	
-$.getJSON('/sendFile?sender='+sender+'&destination='+window.name+'&file1='+file+'&filename=asasa&content_type=asas&stamp=abc', function(data) {});
-	console.log("help");
-	setUpMsg(window.name);
-   //};
+                $("#Users").append(html);
+            });
+        }
+    </script>
 
-}
-</script>
+    <!--Setup message display-->
+    <script id="msgDispTemplate" type="text/x-handlebars-template">
 
-<script>
-function returnFileSize(number) {
-  if(number < 1024) {
-    return number + 'bytes';
-  } else if(number >= 1024 && number < 1048576) {
-    return (number/1024).toFixed(1) + 'KB';
-  } else if(number >= 1048576) {
-    return (number/1048576).toFixed(1) + 'MB';
-  }
-}
-</script>
+        <div class=" msgScreen">
 
-<script>
-function msgForm(user) {
-	var myInfo = document.getElementById("msgFormTemplate").innerHTML;
-  
-	var data = {username: user};
-	var template = Handlebars.compile(myInfo);
-  	var html = template(data);
-        
-	$("#efg").html(html);
-} 
-</script>
+            {{#each this}}
 
-<script>
-function sendMsg(destination) {
-	console.log("start");
-	console.log(destination)
-	var response = document.getElementById('message').value;
-  	console.log(response);
-  	$.getJSON('/msgJS?destination='+destination+'&message='+response, function(data) {});
-	console.log("help");
-	setUpMsg(window.name);
-	return false;
-} 
-</script>
+            <div class="msgContainer">
+                <p1><b>{{SENDER}}</b>: {{MESSAGE}} <i>sent@{{STAMP}}</i></p1>
+            </div>
+
+            {{/each}}
+        </div>
+    </script>
+
+    <script>
+        function msgDisp(user) {
+            $("#fileDisp").html("");
+            var myInfo = document.getElementById("msgDispTemplate").innerHTML;
+            $.getJSON('/getMsgJSON?username=' + user, function(data) {
+                var template = Handlebars.compile(myInfo);
+                var html = template(data);
+                $("#fileDisp").html(html);
+            });
+
+        }
+    </script>
+
+    <!--Setup input form for messages-->
+    <script id="msgFormTemplate" type="text/x-handlebars-template">
+        <div id="inputForm" class="iForm">
+
+            <form method="post" enctype="multipart/form-data" form action="/sendFile?sender=x&destination={{username}}">
+                <div>
+                    <label for="file_uploads">Choose a file to upload</label>
+                    <input type="file" id="file1" name="file1">
+                    <input type="submit" value="Send File" />
+                </div>
+                <div class="preview">
+                    <p>No files currently selected for upload</p>
+                </div>
+                <div>
+                    <button>Submit</button>
+                </div>
+            </form>
 
 
+        </div>
+    </script>
 
+    <script>
+        function msgForm(user) {
+            var myInfo = document.getElementById("msgFormTemplate").innerHTML;
 
-<script>
-function setUpMsg(user) {
-	$("#def").html("");
-	window.name = user;
-	var x = window.name;
-	msgDisp(x);
- 	msgForm(x);
- 
-} 
-</script>
+            var data = {
+                username: user
+            };
+            var template = Handlebars.compile(myInfo);
+            var html = template(data);
+
+            $("#fileInput").html(html);
+        }
+    </script>
+
+    <script>
+        function sendMsg(destination) {
+            var response = document.getElementById('message').value;
+            $.getJSON('/msgJS?destination=' + destination + '&message=' + response, function(data) {});
+            setUpMsg(window.name);
+            return false;
+        }
+    </script>
+
+    <script>
+        function setUpMsg(user) {
+            $("#default").html("");
+            window.name = user;
+            var x = window.name;
+            msgDisp(x);
+            msgForm(x);
+
+        }
+    </script>
 
 </body>
-</html>
 
+</html>

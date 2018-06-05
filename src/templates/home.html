@@ -29,25 +29,12 @@
       <div class="Content" id = "Content">
 
          <!--Messages are displayed here-------------------->
-         <div id="msgDisp" class="msgDisp"> </div>
-
-         <!--Message form is displayed here----------------->
-         <div id="msgInput"> </div>
+         <div id="pDisp" class="pDisp"> </div>
 
          <!--Default text goes here-------------------->
          <div id="default">
 
-            <h3>Sticky Navigation Example</h3>
-            <img src="static/pepe.png">
-            <p>The navbar will stick to the top when you reach its scroll position.</p>
-            <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.
-            </p>
-            <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-            <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-            <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-            <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-            <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-            <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
+            <img src="https://media1.tenor.com/images/db85ba00c6073b451a8f05156a66524e/tenor.gif?itemid=9856796"></img>
 
          </div>
       </div>
@@ -88,7 +75,7 @@
         <p1><b>POSITION:</b> {{position}}</p1><br>
         <p1><b>LOCATION:</b> {{location}}</p1><br>
         <p1><b>DESCRIPTION:</b> {{description}}</p1><br>
-        <p1><b>LASTUPDATED:</b> {{lastUpdated}}</p1><br>
+        <p1><b>LAST UPDATED:</b> {{lastUpdated}}</p1><br>
         <p1><b>ENCODING:</b> {{encoding}}</p1><br>
         <p1><b>ENCRYPTION:</b> {{encryption}}</p1><br>
     </div>
@@ -98,14 +85,14 @@
 
 <script>
     function profileDisp(user) {
-        $("#msgDisp").html("");
+        $("#pDisp").html("");
         var myInfo = document.getElementById("profileDispTemplate").innerHTML;
         $.getJSON('/getProfileJS?profile_username=' + user, function(data) {
             console.log(data);
             var template = Handlebars.compile(myInfo);
             var html = template(data);
 
-            $("#msgDisp").html(html);
+            $("#pDisp").html(html);
         });
 
     }

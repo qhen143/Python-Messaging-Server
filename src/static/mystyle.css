@@ -33,7 +33,6 @@
 }
  div.Userlist {
      width: 30vw;
-    ;
      height: 90vh;
      overflow-y: scroll;
      float: right;
@@ -41,11 +40,15 @@
 }
  div.Userlist div {
      background-color: #eee;
-     color: slategray;
+     color: steelblue;
      display: block;
      padding: 5px;
-     text-decoration: none;
+     
      border-style: solid;
+}
+ div.Userlist a {
+     text-decoration: none;
+     color: slategray;
 }
  div.Userlist div:hover {
      background-color: #ccc;
@@ -56,8 +59,9 @@
 }
  div.Userlist div p10 {
      color: green;
-     font-size: 2vh;
+     font-size: 4vh;
      font-style: italic;
+     float:right;
 }
  div.Userlist p4 {
      padding: 15px;
@@ -80,8 +84,12 @@
 }
  div.Content div.msgDisp {
      overflow-y: auto;
+     
 }
- div.Content div.msgDisp div.msgScreen div.msgContainer p1 {
+ .msgContainer p1 {
+     background-color:seashell;
+}
+ .msgContainer p1 {
      border: 2px solid #dedede;
      background-color: #f1f1f1;
      border-radius: 5px;
@@ -99,7 +107,7 @@
      margin:1vh auto;
 }
  div.Content div.iForm input[type=text] {
-     width:49vw;
+     width:40vw;
      padding:3vh 0;
      box-sizing: border-box;
      display: inline-block;
@@ -134,11 +142,13 @@
 .profileContainer {
      padding:5vh;
      background-color:seashell;
-     width: 35vw;
+     width: 50vw;
      margin:auto;
      box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
      transition: 0.3s;
      border: 1px solid silver;
+height: 80vh;
+     overflow-y: auto;
 }
 .pImg{
      width:300px;
@@ -151,4 +161,21 @@
      max-width:100%;
 }
 
- 
+ input[type=text] {
+    width: 90%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid silver;
+}
+
+p9 {
+float:right;
+margin-right:2vw;
+font-style: italic;
+}
+
+input[type=submit] {
+float:right;
+margin-right:2vw;
+}

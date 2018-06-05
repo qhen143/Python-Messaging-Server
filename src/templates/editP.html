@@ -1,148 +1,108 @@
 <!DOCTYPE html>
 <html>
-<link rel="stylesheet" type="text/css" href="static/mystyle.css">
+   <link rel="stylesheet" type="text/css" href="static/mystyle.css">
+   <head>
+      <title> Connecc </title>
+   </head>
+   <body onload = "loadSession()">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script src="static/handlebars-v4.0.11.js"></script>
+      <div class="Header"></div>
 
-<head>
-<title> w0w </title>
-</head>
+      <!--Navigation Bar-------------------------------->
+      <div class="NavBar">
+         <img src="static/pepe.png">
+         <h>Connecc</h>
+         <a href="/logout"     >Sign Out    </a>
+         <a class="active" href="/editP"      >Edit Profile</a>
+         <a href="/file"       >Files       </a>
+         <a href="/messaging"  >Messenger   </a>
+         <a href="/home">Profile     </a>
+      </div>
 
-<body onload = "loadSession()">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="static/handlebars-v4.0.11.js"></script>
+      <!--Main body of the page-------------------------->
+      <div class="Content" id = "Content">
 
-<div class="Header">
-</div>
+         <!--Messages are displayed here-------------------->
+         <div id="pDisp" class="pDisp"> </div>
 
+         <!--Default text goes here-------------------->
+         <div id="default">
+             <img src="https://media1.tenor.com/images/db85ba00c6073b451a8f05156a66524e/tenor.gif?itemid=9856796"></img>
+         </div>
+      </div>
 
-<!--Navigation Bar-------------------------------->
-<div class="NavBar">
- 	<img src="static/pepe.png">
- 	<a class="active" href="/home">Profile</a>
- 	<a href="/messaging">Messenger</a>
- 	<a href="/file">Files</a>
-	<a href="/editP">Edit Profile</a>
- 	<a href="/logout">Sign Out</a>
+      <script>
+         function loadSession() {
+         	$.getJSON('/getSessionUserJSON', function(data) {
+         		setUpEdit(data.USERNAME);});
+         } 
+      </script>
 
-  	<h>W33D Wizard</h>
-  	<img src="static/pepe.png">
-</div>
+      <!--Setup message display-->
+      <script id = "editProfileTemplate" type = "text/x-handlebars-template"> 
+         <div class="profileContainer">
+         <p9 id = "currentUser" value ={{username}}> <b>{{username}}</b> <br></p9>
+         
+         <form onSubmit="return updateProfile();">
+         
+         <label for="fullname"><b>Full Name</b></label>
+         <input id="fullname" type="text" value= "{{fullname}}"  />
+         
+         <label for="position"><b>Position</b></label>
+         <input id="position" type="text" value= "{{position}}"  />
+         
+         <label for="location"><b>Location</b></label>
+         <input id="location" type="text" value= "{{location}}" />
+         
+         <label for="picture"><b>Picture URL</b></label>
+         <input id="picture" type="text" value= "{{picture}}" />
 
+         <label for="description"><b>Description</b></label>
+         <input id="description" type="text" value= "{{description}}"  />
+         
+         <input type="submit" value="Update Profile" />
+         </form>
+         </div>
+      </script>
 
-<!--Main body of the page-------------------------->
-<div class="Content" id = "abb">
+      <script>
+         function updateProfile() {
+         	var username = window.name;
+         	var fullname = document.getElementById('fullname').value;
+         	var position = document.getElementById('position').value;
+         	var description = document.getElementById('description').value;
+         	var location = document.getElementById('location').value;
+         	var picture = document.getElementById('picture').value;
+         	$.getJSON('/profileEdit?profile_username='+username+'&fullname='+fullname+'&position='+position+'&description='+description+'&location='+location+'&picture='+picture, function(data) {});
+         	setUpEdit(username);
+         	$("#pDisp").html("<p> successfully updated</p>");
+         return false;
+         } 
+      </script>
 
-	<!--Messages are displayed here-------------------->
-	<div id="abc" class="fff"> </div>
+      <script>
+         function editProfileDisp(user) {
+          	$("#pDisp").html("");
+           	var myInfo = document.getElementById("editProfileTemplate").innerHTML;
+           	$.getJSON('/getProfileJS?profile_username='+user).then( function(data) {
+         		var template = Handlebars.compile(myInfo);
+           		var html = template(data);
+         
+         	$("#pDisp").html(html);
+         });
+          
+         } 
+      </script>
 
-	<!--Message form is displayed here----------------->
-	<div id="efg"> </div>
-
-	<!--Default text goes here-------------------->
-	<div id="def"> 
-		<h3>Sticky Navigation Example</h3>
-
-		<img src="static/pepe.png">
-  		<p>The navbar will stick to the top when you reach its scroll position.</p>
-
-  		<p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.
-		</p>
-  <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-  <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-  <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-  <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-  <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-  <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-	</div>
-</div>
-
-<script>
-function loadSession() {
-
-	$.getJSON('/getSessionUserJSON', function(data) {
-		console.log(data);
-		setUpEdit(data.USERNAME);});
-} 
-</script>
-
-
-
-
-<!--Setup message display-->
-<script id = "editProfileTemplate" type = "text/x-handlebars-template"> 
-
-	<div class="profileContainer">
-<p9 id = "currentUser" value ={{username}}> xX{{username}}420Xx </p9>
-
-	<form onSubmit="return updateProfile();">
-
-	<label for="fullname"><b>Full Name</b></label>
-	<input id="fullname" type="text" value= "{{fullname}}"  />
-
-	<label for="position"><b>Position</b></label>
-	<input id="position" type="text" value= "{{position}}"  />
-
-	<label for="description"><b>Description</b></label>
-	<input id="description" type="text" value= "{{description}}"  />
-
-	<label for="location"><b>Location</b></label>
-	<input id="location" type="text" value= "{{location}}" />
-
-	<label for="picture"><b>Picture URL</b></label>
-	<input id="picture" type="text" value= "{{picture}}" />
-
-	<input type="submit" value="Update Profile" />
-	</form>
-	</div>
-
-</script>
-
-<script>
-function updateProfile() {
-	var username = window.name;
-	console.log(username);
-	var fullname = document.getElementById('fullname').value;
-	console.log(fullname);
-	var position = document.getElementById('position').value;
-console.log(position);
-	var description = document.getElementById('description').value;
-console.log(description);
-	var location = document.getElementById('location').value;
-console.log(location);
-	var picture = document.getElementById('picture').value;
-console.log(picture);
-	$.getJSON('/profileEdit?profile_username='+username+'&fullname='+fullname+'&position='+position+'&description='+description+'&location='+location+'&picture='+picture, function(data) {
-	console.log()});
-	setUpEdit(username);
-	$("#abc").html("<p> successfully updated</p>");
-return false;
-} 
-</script>
-
-<script>
-function editProfileDisp(user) {
- 	$("#abc").html("");
-  	var myInfo = document.getElementById("editProfileTemplate").innerHTML;
-  	$.getJSON('/getProfileJS?profile_username='+user).then( function(data) {
-		console.log(data);
-		var template = Handlebars.compile(myInfo);
-  		var html = template(data);
-
-	$("#abc").html(html);
-});
- 
-} 
-</script>
-
-<script>
-function setUpEdit(user) {
-	$("#def").html("");
-	window.name = user;
-	var x = window.name;
-	editProfileDisp(x);
- 
-} 
-</script>
-
-</body>
+      <script>
+         function setUpEdit(user) {
+         	$("#default").html("");
+         	window.name = user;
+         	var x = window.name;
+         	editProfileDisp(x);
+          
+         } 
+      </script>
+   </body>
 </html>
-

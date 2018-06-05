@@ -3,7 +3,7 @@
 <link rel="stylesheet" type="text/css" href="static/mystyle.css">
 
 <head>
-<title> w0w </title>
+<title> Connecc </title>
 </head>
 
 <body onload = "loadUsers()">
@@ -21,7 +21,7 @@
          <a href="/logout"     >Sign Out    </a>
          <a href="/editP"      >Edit Profile</a>
          <a href="/file"       >Files       </a>
-         <a class="active"href="/messaging"  >Messenger   </a>
+         <a class="active" href="/messaging"  >Messenger   </a>
          <a href="/home">Profile     </a>
       </div>
 
@@ -33,143 +33,121 @@
 
 
 <!--Main body of the page-------------------------->
-<div class="Content" id = "abb">
+<div class="Content" id = "Content">
 
 	<!--Messages are displayed here-------------------->
-	<div id="abc" class="fff"> </div>
+	<div id="msgDisp" class="fff"> </div>
 
 	<!--Message form is displayed here----------------->
-	<div id="efg"> </div>
+	<div id="msgInput"> </div>
 
 	<!--Default text goes here-------------------->
-	<div id="def"> 
-		<h3>Sticky Navigation Example</h3>
-
-		<img src="static/pepe.png">
-  		<p>The navbar will stick to the top when you reach its scroll position.</p>
-
-  		<p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.
-		</p>
-  <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-  <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-  <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-  <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-  <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-  <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
+	<div id="default"> 
+		 <img src="https://media1.tenor.com/images/db85ba00c6073b451a8f05156a66524e/tenor.gif?itemid=9856796"></img>
 	</div>
 </div>
 
 
 <!--Setup online users to be display-->
-<script id = "userlistTemplate" type = "text/x-handlebars-template">  
+<script id="userlistTemplate" type="text/x-handlebars-template">
 
-	{{#each this}}
-	<div>
-		<a href="javascript:void(0);" onclick= "setUpMsg('{{USERNAME}}')">{{USERNAME}} : {{LASTLOGIN}} </a>
-	</div>
-	{{/each}}
+    {{#each this}}
+    <div>
+        <a href="javascript:void(0);" onclick="setUpMsg('{{USERNAME}}')">{{USERNAME}} </a>
+	<p10> {{ONLINE}}</p10>
+    </div>
+    {{/each}}
 </script>
 
 <script>
-function loadUsers() {
- 	var myInfo = document.getElementById("userlistTemplate").innerHTML;
-  
-	$.getJSON('/onlineJSON', function(data) {
-		console.log(data);
-	
-		var template = Handlebars.compile(myInfo);
-  		var html = template(data);
- 
-  		$("#Users").append(html);});
-	//$.getJSON('/onlineJSON', function(data) {
-	//	console.log(data);});
-	
-} 
+    function loadUsers() {
+        var myInfo = document.getElementById("userlistTemplate").innerHTML;
+
+        $.getJSON('/onlineJSON', function(data) {
+            console.log(data);
+
+            var template = Handlebars.compile(myInfo);
+            var html = template(data);
+
+            $("#Users").append(html);
+        });
+
+    }
 </script>
 
 
 
 <!--Setup message display-->
-<script id = "msgDispTemplate" type = "text/x-handlebars-template"> 
+<script id="msgDispTemplate" type="text/x-handlebars-template">
 
-<div class =" msgScreen"> 
-	<p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
- 	<p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
+    <div class=" msgScreen">
 
+        {{#each this}}
 
-	{{#each this}}
+        <div class="msgContainer">
+            <p1><b>{{SENDER}}</b>: {{MESSAGE}} <i>sent@{{STAMP}}</i></p1>
+        </div>
 
-	<div class="msgContainer">
-		<p1><b>{{SENDER}}</b>: {{MESSAGE}} <i>sent@{{STAMP}}</i></p1>
-	</div>
-
-	{{/each}} 
-</div>
+        {{/each}}
+    </div>
 </script>
 
 <script>
-function msgDisp(user) {
- 	$("#abc").html("");
-  	var myInfo = document.getElementById("msgDispTemplate").innerHTML;
-  	$.getJSON('/getMsgJSON?username='+user, function(data) {
-		console.log(data);
-	
-		var template = Handlebars.compile(myInfo);
-  		var html = template(data);
+    function msgDisp(user) {
+        $("#msgDisp").html("");
+        var myInfo = document.getElementById("msgDispTemplate").innerHTML;
+        $.getJSON('/getMsgJSON?username=' + user, function(data) {
+            var template = Handlebars.compile(myInfo);
+            var html = template(data);
+            $("#msgDisp").html(html);
+        });
 
-	$("#abc").html(html);
-});
- 
-} 
+    }
 </script>
 
 <!--Setup input form for messages-->
-<script id = "msgFormTemplate" type = "text/x-handlebars-template">  
-<div id = "inputForm" class = "iForm">
-	<form onSubmit="return sendMsg('{{username}}');">
-	<input id="message" type="text" value= "a/s/l?" autofocus />
-	<input type="submit" value="Send to {{username}}" />
-	</form>
-</div>
+<script id="msgFormTemplate" type="text/x-handlebars-template">
+    <div id="inputForm" class="iForm">
+        <form onSubmit="return sendMsg('{{username}}');">
+            <input id="message" type="text" value="a/s/l?" autofocus />
+            <input type="submit" value="Send to {{username}}" />
+        </form>
+    </div>
 </script>
 
 <script>
-function msgForm(user) {
-	var myInfo = document.getElementById("msgFormTemplate").innerHTML;
-  
-	var data = {username: user};
-	var template = Handlebars.compile(myInfo);
-  	var html = template(data);
-        
-	$("#efg").html(html);
-} 
+    function msgForm(user) {
+        var myInfo = document.getElementById("msgFormTemplate").innerHTML;
+        var data = {
+            username: user
+        };
+        var template = Handlebars.compile(myInfo);
+        var html = template(data);
+        $("#msgInput").html(html);
+    }
 </script>
 
 <script>
-function sendMsg(destination) {
-	console.log("start");
-	console.log(destination)
-	var response = document.getElementById('message').value;
-  	console.log(response);
-  	$.getJSON('/msgJS?destination='+destination+'&message='+response, function(data) {});
-	console.log("help");
-	setUpMsg(window.name);
-	return false;
-} 
+    function sendMsg(destination) {
+        var response = document.getElementById('message').value;
+        $.getJSON('/msgJS?destination=' + destination + '&message=' + response, function(data) {});
+        setUpMsg(window.name);
+        return false;
+    }
 </script>
 
 
 
 
 <script>
-function setUpMsg(user) {
-	$("#def").html("");
-	window.name = user;
-	var x = window.name;
-	msgDisp(x);
- 	msgForm(x);
- 
-} 
+    function setUpMsg(user) {
+        $("#default").html("");
+        window.name = user;
+        var x = window.name;
+        msgDisp(x);
+        msgForm(x);
+
+    }
 </script>
 
 </body>
