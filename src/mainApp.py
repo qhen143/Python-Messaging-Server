@@ -52,7 +52,7 @@ class MainApp(object):
     # PAGES (which return HTML that can be viewed in browser)
     @cherrypy.expose
     def index(self):
-	
+	dbLib.initTables()
         Page = "Welcome! This is a test website for COMPSYS302!<br/>"
         
         try:
@@ -238,9 +238,14 @@ class MainApp(object):
         columns = ['username', 'ip', 'location', 'lastLogin', 'port'] #Should change to take into acc pkey
         #insert data into database
         for index, data in json1.iteritems():
-            keys = (index,) + tuple(data[c] for c in columns)
-            dbLib.insertOnline(keys)
-        
+            param = [data.get('username'), data.get('ip'), data.get('location'), data.get('lastLogin'), data.get('port'), 'Online']
+            dbLib.insertOnline(param)
+
+	string1 = urllib2.urlopen("http://cs302.pythonanywhere.com/listUsers").read()
+	userList = string1.split(',')
+	for user in userList:
+	    param = [user, "Not Online", 69, "Not Online", 69, None]
+	    dbLib.insertOnline(param)
         return '0' 
     
     @cherrypy.expose

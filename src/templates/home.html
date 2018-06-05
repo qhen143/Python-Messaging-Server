@@ -1,142 +1,125 @@
 <!DOCTYPE html>
 <html>
-<link rel="stylesheet" type="text/css" href="static/mystyle.css">
+   <link rel="stylesheet" type="text/css" href="static/mystyle.css">
+   <head>
+      <title> Connecc </title>
+   </head>
 
-<head>
-<title> w0w </title>
-</head>
+   <body onload = "loadUsers()">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script src="static/handlebars-v4.0.11.js"></script>
 
-<body onload = "loadUsers()">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="static/handlebars-v4.0.11.js"></script>
+      <div class="Header"></div>
 
-<div class="Header">
-</div>
+      <!--Navigation Bar-------------------------------->
+      <div class="NavBar">
+         <img src="static/pepe.png">
+         <h>Connecc</h>
+         <a href="/logout"     >Sign Out    </a>
+         <a href="/editP"      >Edit Profile</a>
+         <a href="/file"       >Files       </a>
+         <a href="/messaging"  >Messenger   </a>
+         <a class="active" href="/home">Profile     </a>
+      </div>
 
+      <!--Vertical Userlist------------------------------>
+      <div class="Userlist" id = "Users" > </div>
 
-<!--Navigation Bar-------------------------------->
-<div class="NavBar">
-	<img src="static/pepe.png">
- 	<a class="active" href="/home">Profile</a>
- 	<a href="/messaging">Messenger</a>
- 	<a href="/file">Files</a>
-	<a href="/editP">Edit Profile</a>
- 	<a href="/logout">Sign Out</a>
+      <!--Main body of the page-------------------------->
+      <div class="Content" id = "Content">
 
-  	<h>W33D Wizard</h>
-  	<img src="static/pepe.png">
-</div>
+         <!--Messages are displayed here-------------------->
+         <div id="msgDisp" class="msgDisp"> </div>
 
+         <!--Message form is displayed here----------------->
+         <div id="msgInput"> </div>
 
-<!--Vertical Userlist------------------------------>
-<div class="Userlist" id = "Users" >
+         <!--Default text goes here-------------------->
+         <div id="default">
 
-</div>
+            <h3>Sticky Navigation Example</h3>
+            <img src="static/pepe.png">
+            <p>The navbar will stick to the top when you reach its scroll position.</p>
+            <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.
+            </p>
+            <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
+            <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
+            <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
+            <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
+            <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
+            <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
 
+         </div>
+      </div>
 
-<!--Main body of the page-------------------------->
-<div class="Content" id = "abb">
-
-	<!--Messages are displayed here-------------------->
-	<div id="abc" class="fff"> </div>
-
-	<!--Message form is displayed here----------------->
-	<div id="efg"> </div>
-
-	<!--Default text goes here-------------------->
-	<div id="def"> 
-		<h3>Sticky Navigation Example</h3>
-
-		<img src="static/pepe.png">
-  		<p>The navbar will stick to the top when you reach its scroll position.</p>
-
-  		<p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.
-		</p>
-  <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-  <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-  <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-  <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-  <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-  <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
-	</div>
-</div>
-
-
-<!--Setup online users to be display-->
-<script id = "userlistTemplate" type = "text/x-handlebars-template">  
-
-	{{#each this}}
-	<div>
-		<a href="javascript:void(0);" onclick= "setUpProfile('{{USERNAME}}')">{{USERNAME}} </a>
-	</div>
-	{{/each}}
+     <!--Setup online users to be display-->
+<script id="userlistTemplate" type="text/x-handlebars-template">
+    {{#each this}}
+    <div>
+        <a href="javascript:void(0);" onclick="setUpProfile('{{USERNAME}}')">{{USERNAME}} </a>
+        <p10> {{ONLINE}} </p10>
+    </div>
+    {{/each}}
 </script>
 
 <script>
-function loadUsers() {
- 	var myInfo = document.getElementById("userlistTemplate").innerHTML;
-  
-  	$.getJSON('/getAllUsersJSON', function(data) {
-		console.log(data);
-	
-		var template = Handlebars.compile(myInfo);
-  		var html = template(data);
- 
-  		$("#Users").append(html);});
-	$.getJSON('/onlineJSON', function(data) {
-		console.log(data);});
+    function loadUsers() {
+        var myInfo = document.getElementById("userlistTemplate").innerHTML;
 
-	$.getJSON('/getSessionUserJSON', function(data) {
-		console.log(data);
-		setUpProfile(data.USERNAME);});
-} 
+        $.getJSON('/onlineJSON', function(data) {
+            var template = Handlebars.compile(myInfo);
+            var html = template(data);
+            $("#Users").append(html);
+        });
+
+        $.getJSON('/getSessionUserJSON', function(data) {
+            setUpProfile(data.USERNAME);
+        });
+    }
 </script>
-
-
 
 <!--Setup message display-->
-<script id = "profileDispTemplate" type = "text/x-handlebars-template"> 
+<script id="profileDispTemplate" type="text/x-handlebars-template">
 
-	<div class="profileContainer">
-		<p1>USERNAME:{{username}}</p1>
-<p1>FULLNAME:{{fullname}}</p1>
-<p1>DESCRIPTION:{{description}}</p1>
-<p1>LOCATION:{{location}}</p1>
-<p1>LASTUPDATED:{{lastUpdated}}</p1>
-<p1>POSITION:{{position}}</p1>
-<p1>ENC:{{encoding}}</p1>
-<p1>ENCRYPTION:{{encryption}}</p1>
-<p1>DECRYPTIONKEY{{decryptionKey}}</p1>
-	</div>
+    <div class="profileContainer">
+	<div class="pImg"><img src={{picture}})></img></div>
+        <p1><b>USERNAME:</b> {{username}}</p1><br>
+        <p1><b>FULLNAME:</b> {{fullname}}</p1><br>
+        <p1><b>POSITION:</b> {{position}}</p1><br>
+        <p1><b>LOCATION:</b> {{location}}</p1><br>
+        <p1><b>DESCRIPTION:</b> {{description}}</p1><br>
+        <p1><b>LASTUPDATED:</b> {{lastUpdated}}</p1><br>
+        <p1><b>ENCODING:</b> {{encoding}}</p1><br>
+        <p1><b>ENCRYPTION:</b> {{encryption}}</p1><br>
+    </div>
 
-</div>
+    </div>
 </script>
 
 <script>
-function profileDisp(user) {
- 	$("#abc").html("");
-  	var myInfo = document.getElementById("profileDispTemplate").innerHTML;
-  	$.getJSON('/getProfileJS?profile_username='+user, function(data) {
-		console.log(data);
-		var template = Handlebars.compile(myInfo);
-  		var html = template(data);
+    function profileDisp(user) {
+        $("#msgDisp").html("");
+        var myInfo = document.getElementById("profileDispTemplate").innerHTML;
+        $.getJSON('/getProfileJS?profile_username=' + user, function(data) {
+            console.log(data);
+            var template = Handlebars.compile(myInfo);
+            var html = template(data);
 
-	$("#abc").html(html);
-});
- 
-} 
+            $("#msgDisp").html(html);
+        });
+
+    }
 </script>
 
 <script>
-function setUpProfile(user) {
-	$("#def").html("");
-	window.name = user;
-	var x = window.name;
-	profileDisp(x);
- 
-} 
+    function setUpProfile(user) {
+        $("#default").html("");
+        window.name = user;
+        var x = window.name;
+        profileDisp(x);
+
+    }
 </script>
 
-</body>
+   </body>
 </html>
-

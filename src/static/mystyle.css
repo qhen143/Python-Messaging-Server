@@ -1,167 +1,154 @@
-
-div.NavBar {
-	background-color: steelblue;
-	width: 100%;
-	height:10vh;
-	overflow: hidden;
+ div.NavBar {
+     background-color: steelblue;
+     width: 100%;
+     height:10%;
+     overflow: hidden;
+}
+ div.NavBar h {
+     color:white;
+     font-weight: bold;
+     font-size: 100%;
+     font-family: "Verdana";
+}
+ div.NavBar img {
+     max-width: 5%;
+     max-height: 5%;
 }
 
-div.NavBar h {
-	float:right;
-	padding-top: 3vh;
-	margin-right: 5vw;
-	color:white;
-	font-weight: bold;
+ div.NavBar a {
+     float: right;
+     color: white;
+     text-align: center;
+     padding: 2% 4vw;
+     text-decoration: none;
+     font-size: 17px;
+}
+ div.NavBar a:hover {
+     background-color: #ddd;
+     color: black;
+}
+ div.NavBar a.active {
+     background-color: lightsteelblue;
+     color: white;
+}
+ div.Userlist {
+     width: 30vw;
+    ;
+     height: 90vh;
+     overflow-y: scroll;
+     float: right;
+     bottom:0;
+}
+ div.Userlist div {
+     background-color: #eee;
+     color: slategray;
+     display: block;
+     padding: 5px;
+     text-decoration: none;
+     border-style: solid;
+}
+ div.Userlist div:hover {
+     background-color: #ccc;
+}
+ div.Userlist div.active {
+     background-color: lightsteelblue;
+     color: white;
+}
+ div.Userlist div p10 {
+     color: green;
+     font-size: 2vh;
+     font-style: italic;
+}
+ div.Userlist p4 {
+     padding: 15px;
+     display:block;
+     background-color:steelblue;
+     color:white;
+}
+ div.Content {
+     margin-left:5vw;
+     width:60vw;
+}
+ div.Content img {
+     width:auto;
+     height:auto;
+     float:right;
+}
+ div.Content div.msgScreen {
+     height: 80vh;
+     overflow-y: auto;
+}
+ div.Content div.msgDisp {
+     overflow-y: auto;
+}
+ div.Content div.msgDisp div.msgScreen div.msgContainer p1 {
+     border: 2px solid #dedede;
+     background-color: #f1f1f1;
+     border-radius: 5px;
+     padding: 10px;
+     margin: 10px 0;
+     float: left;
+     max-width: 45vw;
+     width: 100%;
+     margin-right: 2vw;
+     margin-left: 1vw;
+}
+ div.Content div.iForm {
+     background-color:green;
+     height: 10vh;
+     margin:1vh auto;
+}
+ div.Content div.iForm input[type=text] {
+     width:49vw;
+     padding:3vh 0;
+     box-sizing: border-box;
+     display: inline-block;
+     border: 1px solid silver;
+}
+ div.Content div.iForm input[type=submit] {
+     background-color: steelblue;
+     color: white;
+     width:10vw;
+     padding:3vh;
+     border: none;
+     cursor: pointer;
+}
+ div.Header p8 {
+     color:white;
+}
+ html{
+     overflow-x:hidden;
+     overflow-y: hidden;
+     width: 100vw;
+}
+ body {
+     margin: 0;
+     font-size: 28px;
+     font-family: Arial, Helvetica, sans-serif;
+}
+ div.Content div.profileScreen {
+     height: 75vh;
+     overflow-y: auto;
 }
 
-div.NavBar img {
-	width:4vw;
-	height: auto;
-	position:absolute;
-	left: 0;
+.profileContainer {
+     padding:5vh;
+     background-color:seashell;
+     width: 35vw;
+     margin:auto;
+     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+     transition: 0.3s;
+     border: 1px solid silver;
+}
+.pImg{
+     width:300px;
+     height:300px;
+     margin:auto;
+}
+.pImg img{
+     text-align:center;
+     max-height:100%;
+     max-width:100%;
 }
 
-div.Content img {
-	width:auto;
-	height:auto;
-	float:right;
-}
-div.NavBar a {
-    float: left;
-    color: white;
-    text-align: center;
-    padding: 4vh 4vw;
-    text-decoration: none;
-    font-size: 17px;
-}
-
-div.NavBar a:hover {
-  background-color: #ddd;
-  color: black;
-}
-
-div.NavBar a.active {
-  background-color: lightsteelblue;
-  color: white;
-}
-
-div.Userlist {
-    width: 30vw;;
-    height: 90vh;
-    overflow-y: scroll;
-    float: right;
-    bottom:0;
-	
-}
-
-div.Userlist a {
-    background-color: #eee; /* Grey background color */
-    color: slategray; /* Black text color */
-    display: block; /* Make the links appear below each other */
-    padding: 5px; /* Add some padding */
-    text-decoration: none; /* Remove underline from links */
-    border-style: solid;
-}
-
-div.Userlist a:hover {
-    background-color: #ccc; /* Dark grey background on mouse-over */
-}
-
-div.Userlist a.active {
-    background-color: lightsteelblue; /* Add a green color to the "active/current" link */
-    color: white;
-}
-
-div.Userlist p4 {
-	padding: 15px;
-	display:block;
-	background-color:steelblue;
-	color:white;
-}
-
-div.Content {
-    background-color:purple;
-    margin-left:5vw;
-    width:60vw;
-    height:90vh;
-}
-
-
-div.Content div.msgScreen {
-	height: 80vh;
-	overflow-y: auto;
-
-	
-}
-
-div.Content div.fff {
-
-	overflow-y: auto;
-
-	
-}
-
-div.Content div.fff div.msgScreen div.msgContainer p1 {
-	border: 2px solid #dedede;
-    background-color: #f1f1f1;
-    border-radius: 5px;
-    padding: 10px;
-    margin: 10px 0;
- float: left;
-    max-width: 45vw;
-    width: 100%;
-    margin-right: 2vw;
-	margin-left: 1vw;
-}
-
-div.Content div.iForm {
-	background-color:green;
-	height: 10vh;
-	margin:1vh auto;
-
-} 
-
-div.Content div.iForm input[type=text] {
-    width:49vw;
-    padding:3vh 0;
-	box-sizing: border-box;
-    display: inline-block;
-    border: 1px solid silver;
-}
-
-div.Content div.iForm  input[type=submit] {
-  background-color: steelblue;
-  color: white;
-width:10vw;
-  padding:3vh;
-  border: none;
-  cursor: pointer;
-}
-
-div.Header p8 {
-	color:white;
-	
-}
-
-html{
-	overflow-x:hidden;
-overflow-y: hidden;
-	width: 100vw;
-}
-
-body {
-  margin: 0;
-  font-size: 28px;
-
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-
-
-div.Content div.profileScreen {
-	height: 75vh;
-	overflow-y: auto;
-
-	
-}
-
+ 

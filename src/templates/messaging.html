@@ -14,18 +14,16 @@
 </div>
 
 
-<!--Navigation Bar-------------------------------->
-<div class="NavBar">
- 	<img src="static/pepe.png">
- 	<a class="active" href="/home">Profile</a>
- 	<a href="/messaging">Messenger</a>
- 	<a href="/file">Files</a>
-	<a href="/editP">Edit Profile</a>
- 	<a href="/logout">Sign Out</a>
-
-  	<h>W33D Wizard</h>
-  	<img src="static/pepe.png">
-</div>
+  <!--Navigation Bar-------------------------------->
+      <div class="NavBar">
+         <img src="static/pepe.png">
+         <h>Connecc</h>
+         <a href="/logout"     >Sign Out    </a>
+         <a href="/editP"      >Edit Profile</a>
+         <a href="/file"       >Files       </a>
+         <a class="active"href="/messaging"  >Messenger   </a>
+         <a href="/home">Profile     </a>
+      </div>
 
 
 <!--Vertical Userlist------------------------------>
@@ -76,15 +74,15 @@
 function loadUsers() {
  	var myInfo = document.getElementById("userlistTemplate").innerHTML;
   
-	$.getJSON('/getAllUsersJSON', function(data) {
+	$.getJSON('/onlineJSON', function(data) {
 		console.log(data);
 	
 		var template = Handlebars.compile(myInfo);
   		var html = template(data);
  
   		$("#Users").append(html);});
-	$.getJSON('/onlineJSON', function(data) {
-		console.log(data);});
+	//$.getJSON('/onlineJSON', function(data) {
+	//	console.log(data);});
 	
 } 
 </script>
