@@ -99,22 +99,7 @@ class MainApp(object):
         Page = '<form action="/signout">'
         Page += '<input type="submit" value="signout"/></form>'
         return Page
-    
-    @cherrypy.expose
-    def profileEdit(self, profile_username, fullname, position, description, location, picture):
-	data = {'fullname': fullname, 'position':position, 'description':description, 'location':location, 'picture':picture, 'encoding': 0, 'encryption':0, "decryptionKey":None , "lastUpdated":time.time()}
-	print("asasasasasasasas")	
-	print(data)	
-	data = json.dumps(data)
-	data = json.loads(data)
-	print("mmmmmmmmmmmmm")
-	print(data)
-	dbLib.updateProfile(data,profile_username)
-	print("yaasssss")
-	return json.dumps({"test":0})
-	#return self.editP()
 	
-
     @cherrypy.expose
     @cherrypy.tools.json_out()
     def getSessionUserJSON(self):
@@ -129,41 +114,44 @@ class MainApp(object):
 	
     @cherrypy.expose
     def sendFile(self, sender, destination, file1, ):
-	print(file1)
-	print(type(file1))
-	sender = cherrypy.session.get('username')
-	print(sender, destination)
-	filename = file1.filename
-	print(filename)
-	content_type = mimetypes.guess_type(filename)[0]
-	print(content_type)
-	bin = file1.file.read()
-	print(file1)
-	#file1 = open(file1, 'rb')
-	print(type(file1))
-	#filestring = file1.read()
-	#print(base64.b64encode(filestring))
 
 	url = dbLib.getUserAddress(destination) + "/receiveFile"
-	
-	#print("")
+
+	sender = cherrypy.session.get('username')
+	filename = file1.filename
+	content_type = mimetypes.guess_type(filename)[0]
+	bin = file1.file.read()
         stamp = str(time.time())
+
 	key = ['sender', 'destination','file', 'filename', 'content_type', 'stamp', 'encoding', 'encryption', 'hashing', 'hash', 'decryptionKey', 'groupID' ]
-	param = [cherrypy.session.get('username'), destination, base64.b64encode(bin), filename, content_type, stamp, 0, 0, 0, None, None, None ]
-
+	param = [sender, destination, base64.b64encode(bin), filename, content_type, stamp, 0, 0, 0, None, None, None ]
 	data = collections.OrderedDict(zip(key,param))
-	print(data)
         data = json.dumps(data)
+
         request = urllib2.Request(url,data, {'Content-Type': 'application/json'})
-
         print(request)#remove later
-
         error = urllib2.urlopen(request, timeout = 15)
-	print("@@@@@@@@@@@@@@@@@")
         print(error.read())#remove later
-	print("@@@@@@@@@@@@@@@@@")
+
 	dbLib.insertFile(param)
-	raise cherrypy.HTTPRedirect('/file')
+	raise cherrypy.HTTPRedirect('/file') #prob make something to display the file
+    
+    @cherrypy.expose
+    @cherrypy.tools.json_in()
+    def receiveFile(self):
+        data = cherrypy.request.json
+
+        param = [data.get('sender'), data.get('destination'), data.get('file'), data.get('filename'), data.get('content_type'), data.get('stamp'), data.get('encoding', 0), data.get('encryption', 0), data.get('hashing', 0), data.get('hash', None), data.get('decryptionKey', None), data.get('groupID', None)]
+
+	dbLib.insertFile(param)
+	
+	save_path = './static/userFiles'
+	nameFile = os.path.join(save_path, data.get('filename'))         
+	file = open(nameFile,'w') 
+	file.write(base64.b64decode(data.get('file')))
+	file.close()
+
+	return '0'
 
     @cherrypy.expose
     def sendMessage(self, sender, destination, message, stamp, encoding=0, encryption = '0', hashing = 0, hash = None, decryptionKey = None , groupID = None):
@@ -171,57 +159,25 @@ class MainApp(object):
 	url = dbLib.getUserAddress(destination) + "/receiveMessage"
 
         stamp = time.time()
-
 	key = ['sender', 'destination','message', 'stamp', 'encoding', 'encryption', 'hashing', 'hash', 'decryptionKey', 'groupID' ]
-	param = [sender, destination,message, stamp, encoding, encryption, hashing, hash, decryptionKey, groupID ]
+	param = [sender, destination, message, stamp, encoding, encryption, hashing, hash, decryptionKey, groupID ]
 	data = collections.OrderedDict(zip(key,param))
-
         data = json.dumps(data)
+
         request = urllib2.Request(url,data, {'Content-Type': 'application/json'})
-
         print(request)#remove later
-
         error = urllib2.urlopen(request, timeout = 7.0)
-
         print(error.read())#remove later
 
 	dbLib.insertMessage(param)
-	
-     #NEED TO RETEST
-    @cherrypy.expose
-    @cherrypy.tools.json_in()
-    def receiveFile(self):
-        data = cherrypy.request.json
 
-	try:
-            param = tuple([data['sender'],data['destination'],data['file'],data['filename'],data['content_type'], data['stamp'], data['encoding'], data['encryption'],data['hashing'],data['hash'],data['decryptionKey'],data['groupID']])
-	    print(param)
-
-	except KeyError:
-	    param = tuple([data['sender'],data['destination'],data['file'],data['filename'], data['content_type'], data['stamp'],'0', '0', '0', None, None , None])
-        
-	dbLib.insertFile(param)
-	
-	save_path = './static/userFiles'
-	nameFile = os.path.join(save_path, data.get('filename'))         
-	file = open(nameFile,'w') 
-	file.write(base64.b64decode(data.get('file')))
-	file.close() 
-	return '0'
-
-    #NEED TO RETEST
     @cherrypy.expose
     @cherrypy.tools.json_in()
     def receiveMessage(self):
         data = cherrypy.request.json
 
-	try:
-            param = tuple([data['sender'],data['destination'],data['message'],data['stamp'],data['encoding'],data['encryption'],data['hashing'],data['hash'],data['decryptionKey'],data['groupID']])
-	    print(param)
+        param = [data.get('sender'), data.get('destination'), data.get('message'), data.get('stamp'), data.get('encoding', 0), data.get('encryption', 0), data.get('hashing', 0), data.get('hash', None), data.get('decryptionKey', None), data.get('groupID', None)]
 
-	except KeyError:
-	    param = tuple([data['sender'],data['destination'],data['message'],data['stamp'],'0', '0', '0', None, None , None])
-        
 	dbLib.insertMessage(param)
 	return '0'
         
@@ -234,9 +190,6 @@ class MainApp(object):
     @cherrypy.tools.json_out()
     def getProfileJS(self, profile_username):
 	self.updateProfile(profile_username)
-	#print("goodbye",self.getProfile(profile_username, cherrypy.session.get('username')))
-	#return self.getProfile(json.dumps({'profile_user':profile_username,'sender': cherrypy.session.get('username')}))
-	print("queeeen")
 	return dbLib.getProfile(profile_username)
 
     @cherrypy.expose
@@ -244,15 +197,16 @@ class MainApp(object):
     @cherrypy.tools.json_out()
     def getProfile(self):
 	data = cherrypy.request.json
-	print(data)
-	#print("hello", dbLib.getProfile(data['profile_username'])
 	return dbLib.getProfile(data['profile_username'])
-
-
+    
+    @cherrypy.expose
+    def profileEdit(self, profile_username, fullname, position, description, location, picture):
+	data = {'fullname': fullname, 'position':position, 'description':description, 'location':location, 'picture':picture, 'encoding': 0, 'encryption':0, "decryptionKey":None , "lastUpdated":time.time()}	
+	dbLib.updateProfile(data,profile_username)
+	return json.dumps({"test":0})
 	
     @cherrypy.expose
     def updateProfile(self, username):
-	print(username)
 	url = dbLib.getUserAddress(username) + "/getProfile"
 	param = {'profile_username':username , 'sender': cherrypy.session.get('username')}
         param = json.dumps(param)
@@ -261,9 +215,7 @@ class MainApp(object):
         print(request)#remove later
 	try:
             data = urllib2.urlopen(request, timeout = 7.0).read()
-	    print("lllll",data)
 	    data = json.loads(data)
-	    print(data)
 	    dbLib.updateProfile(data, username)
 	except urllib2.URLError as e:
             print ('Connection timeout')
@@ -323,7 +275,7 @@ class MainApp(object):
 	    dbLib.initUserList(userList)
             raise cherrypy.HTTPRedirect('/home')
         else:
-            raise cherrypy.HTTPRedirect('/sum?a=3&b=5')
+            raise cherrypy.HTTPRedirect('/login')
 
     @cherrypy.expose
     def signout(self):
@@ -336,9 +288,6 @@ class MainApp(object):
         raise cherrypy.HTTPRedirect('/')
         
     def authoriseUserLogin(self, username, password):
-        print username
-        print password
-#B3FCE8CFCA6465845E55964425D585E874818DC351037B88858C413CECAEDB19
 	hash1 = hashlib.sha256(password+username).hexdigest()
 	
 	ip = socket.gethostbyname(socket.gethostname())
@@ -346,7 +295,6 @@ class MainApp(object):
 	#s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         #s.connect(("8.8.8.8", 80))
         #ip = s.getsockname()[0]
-        #print(s.getsockname()[0])
         #s.close()
 
 	#ip = urllib2.urlopen('http://ip.42.pl/raw').read()
