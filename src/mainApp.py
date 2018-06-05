@@ -290,16 +290,16 @@ class MainApp(object):
     def authoriseUserLogin(self, username, password):
 	hash1 = hashlib.sha256(password+username).hexdigest()
 	
-	ip = socket.gethostbyname(socket.gethostname())
+	#ip = socket.gethostbyname(socket.gethostname())
 	
 	#s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         #s.connect(("8.8.8.8", 80))
         #ip = s.getsockname()[0]
         #s.close()
 
-	#ip = urllib2.urlopen('http://ip.42.pl/raw').read()
+	ip = urllib2.urlopen('http://ip.42.pl/raw').read()
 	print ip
-        test = urllib.urlopen("http://cs302.pythonanywhere.com/report?username=" + username+"&password="+ hash1+"&location=0&ip="+ip+"&port="+str(listen_port)+"&enc=0")
+        test = urllib.urlopen("http://cs302.pythonanywhere.com/report?username=" + username+"&password="+ hash1+"&location=2&ip="+ip+"&port="+str(listen_port)+"&enc=0")
 	output = test.read().decode('utf-8')
 	print output
         print username
