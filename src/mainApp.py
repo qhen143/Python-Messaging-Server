@@ -25,6 +25,8 @@ import collections
 import time
 import ast
 import string
+import base64
+import mimetypes
 
 
 import dbFunc as dbLib
@@ -126,22 +128,28 @@ class MainApp(object):
 	return {'status':0}
 	
     @cherrypy.expose
-    def sendFile(self, sender, destination, file1, filename, content_type, stamp, encoding=0, encryption = '0', hashing = 0, hash = None, decryptionKey = None , groupID = None):
-	#print("-------------------"+file1+"------------------")
-	#print("@@@@@@@@@@@"+param+"@@@@@@@@@@@@@")
-	print("@@@@@@@@@@@"+destination+"@@@@@@@@@@@@@")
-	print("@@@@@@@@@@@"+filename+"@@@@@@@@@@@@@")
-	print("@@@@@@@@@@@"+content_type+"@@@@@@@@@@@@@")
-	print("@@@@@@@@@@@"+stamp+"@@@@@@@@@@@@@")
-	#print("@@@@@@@@@@@"+file1+"@@@@@@@@@@@@@")
-	#print("@@@@@@@@@@@"+encryption+"@@@@@@@@@@@@@")
-	print("@@@@@@@@@@@"+sender+"@@@@@@@@@@@@@")
+    def sendFile(self, sender, destination, file1, ):
+	print(file1)
+	print(type(file1))
+	sender = cherrypy.session.get('username')
+	print(sender, destination)
+	filename = file1.filename
+	print(filename)
+	content_type = mimetypes.guess_type(filename)[0]
+	print(content_type)
+	bin = file1.file.read()
+	print(file1)
+	#file1 = open(file1, 'rb')
+	print(type(file1))
+	#filestring = file1.read()
+	#print(base64.b64encode(filestring))
+
 	url = dbLib.getUserAddress(destination) + "/receiveFile"
 	
 	#print("")
         stamp = str(time.time())
 	key = ['sender', 'destination','file', 'filename', 'content_type', 'stamp', 'encoding', 'encryption', 'hashing', 'hash', 'decryptionKey', 'groupID' ]
-	param = [cherrypy.session.get('username'), destination, file1, filename, content_type, stamp, encoding, encryption, hashing, hash, decryptionKey, groupID ]
+	param = [cherrypy.session.get('username'), destination, base64.b64encode(bin), filename, content_type, stamp, 0, 0, 0, None, None, None ]
 
 	data = collections.OrderedDict(zip(key,param))
 	print(data)
@@ -155,6 +163,7 @@ class MainApp(object):
         print(error.read())#remove later
 	print("@@@@@@@@@@@@@@@@@")
 	dbLib.insertFile(param)
+	raise cherrypy.HTTPRedirect('/file')
 
     @cherrypy.expose
     def sendMessage(self, sender, destination, message, stamp, encoding=0, encryption = '0', hashing = 0, hash = None, decryptionKey = None , groupID = None):
@@ -192,6 +201,12 @@ class MainApp(object):
 	    param = tuple([data['sender'],data['destination'],data['file'],data['filename'], data['content_type'], data['stamp'],'0', '0', '0', None, None , None])
         
 	dbLib.insertFile(param)
+	
+	save_path = './static/userFiles'
+	nameFile = os.path.join(save_path, data.get('filename'))         
+	file = open(nameFile,'w') 
+	file.write(base64.b64decode(data.get('file')))
+	file.close() 
 	return '0'
 
     #NEED TO RETEST

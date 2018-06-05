@@ -129,10 +129,11 @@ function msgDisp(user) {
 <script id = "msgFormTemplate" type = "text/x-handlebars-template">  
 <div id = "inputForm" class = "iForm">
 
-	<form method="post" enctype="multipart/form-data" onSubmit = "return test();">
+	<form method="post"  enctype="multipart/form-data" form action= "/sendFile?sender=x&destination={{username}}">
   <div>
     <label for="file_uploads">Choose a file to upload</label>
-    <input type="file" id="file_upload" name="file_upload">
+    <input type="file" id="file1" name="file1">
+	<input type="submit" value="Send File" />
   </div>
   <div class="preview">
     <p>No files currently selected for upload</p>
@@ -153,6 +154,7 @@ $.getJSON('/getSessionUserJSON', function(data) {
 		console.log(data);
 		var sender = data.USERNAME;
 var file = document.getElementById("file_upload").files[0];
+//var file = document.getElementById("file_upload");
 readFile(file,sender);
 });
 
@@ -163,31 +165,22 @@ return false;
 
 <script>
 function readFile(file,sender) {
-var name = file.name;
-var size = returnFileSize(file.size);
-var mime = file.type;
-   var reader = new FileReader();
-   reader.readAsDataURL(file);
-   reader.onload = function () {
-     var b64 = reader.result;
-	b64 = b64.substr(reader.result.indexOf(',') + 1)
+//var name = file.name;
+//var size = returnFileSize(file.size);
+//var mime = file.type;
+//   var reader = new FileReader();
+//   reader.readAsDataURL(file);
+//   reader.onload = function () {
+//     var b64 = reader.result;
+//	b64 = b64.substr(reader.result.indexOf(',') + 1)
 	
-     console.log(b64);
-	
-$.getJSON('/sendFile?sender='+sender+'&destination='+window.name+'&file1='+b64+'&filename='+name+'&content_type='+mime+'&stamp=abc', function(data) {});
+//     console.log(b64);
+console.log(file);	
+$.getJSON('/sendFile?sender='+sender+'&destination='+window.name+'&file1='+file+'&filename=asasa&content_type=asas&stamp=abc', function(data) {});
 	console.log("help");
 	setUpMsg(window.name);
-   };
+   //};
 
-   reader.onerror = function (error) {
-     console.log('Error: ', error);
-     return "error";
-   };
-
-console.log(file);
-console.log(name);
-console.log(size);
-console.log(mime);
 }
 </script>
 
