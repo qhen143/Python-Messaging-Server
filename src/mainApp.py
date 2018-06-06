@@ -295,19 +295,31 @@ class MainApp(object):
     def authoriseUserLogin(self, username, password):
 	hash1 = hashlib.sha256(password+username).hexdigest()
 	
-	#ip = socket.gethostbyname(socket.gethostname())
-	
-	#s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        #s.connect(("8.8.8.8", 80))
-        #ip = s.getsockname()[0]
-        #s.close()
+	localip = socket.gethostbyname(socket.gethostname())
 
-	ip = urllib2.urlopen('http://ip.42.pl/raw').read()
-	print ip
-        test = urllib.urlopen("http://cs302.pythonanywhere.com/report?username=" + username+"&password="+ hash1+"&location=2&ip="+ip+"&port="+str(listen_port)+"&enc=0")
+	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        ip2 = s.getsockname()[0]
+	s.close()
+
+	publicip = urllib2.urlopen('http://ip.42.pl/raw').read()
+	print localip
+	print ip2
+	print publicip
+        
+	if localip.startswith("10."):
+	    ip = localip;
+            location = 0;
+	elif ip2.startswith("172.23"):
+	    ip = ip2;
+            location = 1;
+	else:
+	    ip = publicip;
+            location = 2;
+
+        test = urllib.urlopen("http://cs302.pythonanywhere.com/report?username=" + username+"&password="+ hash1+"&location="+str(location)+"&ip="+ip+"&port="+str(listen_port)+"&enc=0")
 	output = test.read().decode('utf-8')
 	print output
-        print username
         if output[0] == str(0):
             return 0
 	    print "asaslasd"

@@ -154,11 +154,13 @@ height: 80vh;
      width:300px;
      height:300px;
      margin:auto;
+
 }
 .pImg img{
      text-align:center;
      max-height:100%;
      max-width:100%;
+
 }
 
  input[type=text] {
