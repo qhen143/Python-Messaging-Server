@@ -68,11 +68,20 @@
     }
 </script>
 
+<script>
+    function refresh() {
+        $.getJSON('/refresh', function(data) {
+		 window.setTimeout(function() {refresh();}, 10000);
+        });
+   
+    }
+</script>
+
 <!--Setup message display-->
 <script id="profileDispTemplate" type="text/x-handlebars-template">
 
     <div class="profileContainer">
-	<div class="pImg"><img src={{picture}})></img></div>
+	<div class="pImg"><img src={{picture}}></img></div>
         <p1><b>USERNAME:</b> {{username}}</p1><br>
         <p1><b>FULLNAME:</b> {{fullname}}</p1><br>
         <p1><b>POSITION:</b> {{position}}</p1><br>
@@ -106,6 +115,7 @@
         window.name = user;
         var x = window.name;
         profileDisp(x);
+	refresh();
 
     }
 </script>

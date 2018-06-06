@@ -27,13 +27,15 @@ import ast
 import string
 import base64
 import mimetypes
-
+import threading
 
 import dbFunc as dbLib
 
 import os, os.path
 
 class MainApp(object):
+    
+    
 
     #CherryPy Configuration
     _cp_config = {'tools.encode.on': True, 
@@ -49,10 +51,23 @@ class MainApp(object):
         cherrypy.response.status = 404
         return Page
 
+    @cherrypy.expose
+    @cherrypy.tools.json_out() 
+    def refresh(self):
+        #self.getList();
+	#authoriseUserLogin(cherrypy.session.get('username'), cherrypy.session.get('password'))
+	print("UPDATING")
+
+	#if active:
+	    #threading.Timer(30.0, self.refreshData())	
+	return {}
+ 
     # PAGES (which return HTML that can be viewed in browser)
     @cherrypy.expose
     def index(self):
 	dbLib.initTables()
+	
+	#threading.Timer(5, self.refreshData())
         Page = "Welcome! This is a test website for COMPSYS302!<br/>"
         
         try:
@@ -99,7 +114,7 @@ class MainApp(object):
         Page = '<form action="/signout">'
         Page += '<input type="submit" value="signout"/></form>'
         return Page
-	
+
     @cherrypy.expose
     @cherrypy.tools.json_out()
     def getSessionUserJSON(self):
@@ -341,6 +356,12 @@ class MainApp(object):
 	    print "asaslasd"
         else:
             return 1
+
+
+    
+    #Monitor(cherrypy.engine, refreshData, frequency=300).subscribe()
+    
+    
           
 def runMainApp():
     conf = {
