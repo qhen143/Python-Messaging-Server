@@ -59,9 +59,9 @@
 }
  div.Userlist div p10 {
      color: green;
-     font-size: 4vh;
+     font-size: 17px;
      font-style: italic;
-     float:right;
+
 }
  div.Userlist p4 {
      padding: 15px;
@@ -180,4 +180,25 @@ font-style: italic;
 input[type=submit] {
 float:right;
 margin-right:2vw;
+}
+
+ embed {
+     margin:auto;
+}
+
+ .fileContainer div {
+     border: 2px solid #dedede;
+     background-color: #f1f1f1;
+     border-radius: 5px;
+     padding: 10px;
+     margin: 10px 0;
+     float: left;
+     max-width: 45vw;
+     width: 100%;
+     margin-right: 2vw;
+     margin-left: 1vw;
+}
+
+p3 {
+     float:right;
 }

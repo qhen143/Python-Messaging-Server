@@ -111,7 +111,13 @@ class MainApp(object):
 	sender = cherrypy.session.get('username')
 	self.sendMessage(sender,destination, message, None)
 	return {'status':0}
-	
+
+    @cherrypy.expose
+    @cherrypy.tools.json_out() 
+    def getFileJSON(self, username):
+	print(dbLib.getFile(username))
+	return dbLib.getFile(username)
+
     @cherrypy.expose
     def sendFile(self, sender, destination, file1, ):
 
@@ -132,7 +138,14 @@ class MainApp(object):
         print(request)#remove later
         error = urllib2.urlopen(request, timeout = 15)
         print(error.read())#remove later
+	
+	save_path = './static/userFiles'
+	nameFile = os.path.join(save_path, filename)         
+	file = open(nameFile,'w') 
+	file.write(bin)
+	file.close()
 
+	param[2] = save_path
 	dbLib.insertFile(param)
 	raise cherrypy.HTTPRedirect('/file') #prob make something to display the file
     
@@ -141,15 +154,18 @@ class MainApp(object):
     def receiveFile(self):
         data = cherrypy.request.json
 
-        param = [data.get('sender'), data.get('destination'), data.get('file'), data.get('filename'), data.get('content_type'), data.get('stamp'), data.get('encoding', 0), data.get('encryption', 0), data.get('hashing', 0), data.get('hash', None), data.get('decryptionKey', None), data.get('groupID', None)]
+        #param = [data.get('sender'), data.get('destination'), data.get('file'), data.get('filename'), data.get('content_type'), data.get('stamp'), data.get('encoding', 0), data.get('encryption', 0), data.get('hashing', 0), data.get('hash', None), data.get('decryptionKey', None), data.get('groupID', None)]
 
-	dbLib.insertFile(param)
+	#dbLib.insertFile(param)
 	
 	save_path = './static/userFiles'
 	nameFile = os.path.join(save_path, data.get('filename'))         
 	file = open(nameFile,'w') 
 	file.write(base64.b64decode(data.get('file')))
 	file.close()
+	
+	param = [data.get('sender'), data.get('destination'), save_path, data.get('filename'), data.get('content_type'), data.get('stamp'), data.get('encoding', 0), data.get('encryption', 0), data.get('hashing', 0), data.get('hash', None), data.get('decryptionKey', None), data.get('groupID', None)]
+	dbLib.insertFile(param)
 
 	return '0'
 
@@ -244,7 +260,7 @@ class MainApp(object):
 	string1 = urllib2.urlopen("http://cs302.pythonanywhere.com/listUsers").read()
 	userList = string1.split(',')
 	for user in userList:
-	    param = [user, "Not Online", 69, "Not Online", 69, None]
+	    param = [user, "Not Online", None, "Not Online", 69, None]
 	    dbLib.insertOnline(param)
         return '0' 
     
@@ -263,7 +279,6 @@ class MainApp(object):
     @cherrypy.expose
     @cherrypy.tools.json_out() 
     def onlineJSON(self):
-	self.getList()
 	data = dbLib.getOnline()
         return data
 
@@ -278,6 +293,7 @@ class MainApp(object):
             string1 = urllib2.urlopen("http://cs302.pythonanywhere.com/listUsers").read()
 	    userList = string1.split(',')
 	    dbLib.initUserList(userList)
+	    self.getList()
             raise cherrypy.HTTPRedirect('/home')
         else:
             raise cherrypy.HTTPRedirect('/login')
@@ -329,6 +345,8 @@ class MainApp(object):
 def runMainApp():
     conf = {
         '/': {
+	    'tools.encode.on': True, 
+            'tools.encode.encoding': 'utf-8',
             'tools.sessions.on': True,
             'tools.staticdir.root': os.path.abspath(os.getcwd())
         },

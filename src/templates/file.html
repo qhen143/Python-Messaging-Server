@@ -3,7 +3,7 @@
 <link rel="stylesheet" type="text/css" href="static/mystyle.css">
 
 <head>
-    <title> w0w </title>
+    <title> Connecc </title>
 </head>
 
 <body onload="loadUsers()">
@@ -74,14 +74,17 @@
     </script>
 
     <!--Setup message display-->
-    <script id="msgDispTemplate" type="text/x-handlebars-template">
+    <script id="fileDispTemplate" type="text/x-handlebars-template">
 
         <div class=" msgScreen">
 
             {{#each this}}
 
-            <div class="msgContainer">
-                <p1><b>{{SENDER}}</b>: {{MESSAGE}} <i>sent@{{STAMP}}</i></p1>
+            <div class="fileContainer">
+		<div>
+                <p1><b>{{SENDER}}</b>: {{MESSAGE}} <i>sent@{{STAMP}}</i><br></p1>
+		<embed type="{{CONTENT_TYPE}}" src="{{FILE}}/{{FILENAME}}" width="800" height="600">
+		</div>
             </div>
 
             {{/each}}
@@ -89,10 +92,10 @@
     </script>
 
     <script>
-        function msgDisp(user) {
+        function fileDisp(user) {
             $("#fileDisp").html("");
-            var myInfo = document.getElementById("msgDispTemplate").innerHTML;
-            $.getJSON('/getMsgJSON?username=' + user, function(data) {
+            var myInfo = document.getElementById("fileDispTemplate").innerHTML;
+            $.getJSON('/getFileJSON?username=' + user, function(data) {
                 var template = Handlebars.compile(myInfo);
                 var html = template(data);
                 $("#fileDisp").html(html);
@@ -102,7 +105,7 @@
     </script>
 
     <!--Setup input form for messages-->
-    <script id="msgFormTemplate" type="text/x-handlebars-template">
+    <script id="fileFormTemplate" type="text/x-handlebars-template">
         <div id="inputForm" class="iForm">
 
             <form method="post" enctype="multipart/form-data" form action="/sendFile?sender=x&destination={{username}}">
@@ -124,8 +127,8 @@
     </script>
 
     <script>
-        function msgForm(user) {
-            var myInfo = document.getElementById("msgFormTemplate").innerHTML;
+        function fileForm(user) {
+            var myInfo = document.getElementById("fileFormTemplate").innerHTML;
 
             var data = {
                 username: user
@@ -138,21 +141,12 @@
     </script>
 
     <script>
-        function sendMsg(destination) {
-            var response = document.getElementById('message').value;
-            $.getJSON('/msgJS?destination=' + destination + '&message=' + response, function(data) {});
-            setUpMsg(window.name);
-            return false;
-        }
-    </script>
-
-    <script>
         function setUpMsg(user) {
             $("#default").html("");
             window.name = user;
             var x = window.name;
-            msgDisp(x);
-            msgForm(x);
+            fileDisp(x);
+            fileForm(x);
 
         }
     </script>

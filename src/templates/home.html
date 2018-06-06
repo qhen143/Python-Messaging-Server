@@ -44,6 +44,9 @@
     {{#each this}}
     <div>
         <a href="javascript:void(0);" onclick="setUpProfile('{{USERNAME}}')">{{USERNAME}} </a>
+	{{#if ONLINE}}	
+	<p3> Location: {{LOCATION}}</p3>
+	{{/if}}
         <p10> {{ONLINE}} </p10>
     </div>
     {{/each}}
@@ -88,7 +91,6 @@
         $("#pDisp").html("");
         var myInfo = document.getElementById("profileDispTemplate").innerHTML;
         $.getJSON('/getProfileJS?profile_username=' + user, function(data) {
-            console.log(data);
             var template = Handlebars.compile(myInfo);
             var html = template(data);
 

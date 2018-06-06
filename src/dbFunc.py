@@ -102,7 +102,7 @@ def getOnline():
 	db = sqlite3.connect('db/clientData')
 	db.row_factory = sqlite3.Row
         cursor = db.cursor()
-	cursor.execute("SELECT username, lastlogin, online FROM online ORDER BY username ASC")
+	cursor.execute("SELECT username, lastlogin, location, online FROM online ORDER BY username ASC")
 	data = []
 	for row in cursor:
 		data.append(row2Dict(row))
