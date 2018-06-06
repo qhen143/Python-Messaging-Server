@@ -1,13 +1,13 @@
 import sqlite3
 import collections
-
+import time
 def initTables():
 	db = sqlite3.connect('db/clientData')
         cursor = db.cursor()
-	cursor.execute('''CREATE TABLE IF NOT EXISTS online(USERNAME TEXT UNIQUE PRIMARY KEY, IP TEXT NOT NULL, PKEY TEXT, LOCATION INTEGER, LASTLOGIN TEXT, PORT INTEGER NOT NULL, ONLINE TEXT)''')
+	cursor.execute('''CREATE TABLE IF NOT EXISTS online(USERNAME TEXT UNIQUE PRIMARY KEY, IP TEXT NOT NULL, PKEY TEXT, LOCATION INTEGER, LASTLOGIN NUMERIC, PORT INTEGER NOT NULL, ONLINE TEXT)''')
 	cursor.execute('''CREATE TABLE IF NOT EXISTS messages(ID INTEGER PRIMARY KEY, SENDER TEXT NOT NULL, DESTINATION TEXT NOT NULL, MESSAGE TEXT, STAMP TEXT, ENC INTEGER, ENCRYPTION INTEGER, HASHING INTEGER, HASH TEXT, DECRYPTIONKEY TEXT, GROUPID TEXT)''')
-	cursor.execute('''CREATE TABLE IF NOT EXISTS files(ID INTEGER PRIMARY KEY, SENDER TEXT NOT NULL, DESTINATION TEXT NOT NULL, FILE TEXT, FILENAME TEXT, CONTENT_TYPE TEXT, STAMP TEXT, ENC INTEGER, ENCRYPTION INTEGER, HASHING INTEGER, HASH TEXT, DECRYPTIONKEY TEXT, GROUPID TEXT)''')
-	cursor.execute('''CREATE TABLE IF NOT EXISTS profile(USERNAME TEXT UNIQUE PRIMARY KEY, FULLNAME TEXT, POSITION TEXT, DESCRIPTION TEXT, LOCATION TEXT, LASTUPDATED TEXT NOT NULL, PICTURE TEXT, ENC INTEGER, ENCRYPTION INTEGER, DECRYPTIONKEY TEXT )''')
+	cursor.execute('''CREATE TABLE IF NOT EXISTS files(ID INTEGER PRIMARY KEY, SENDER TEXT NOT NULL, DESTINATION TEXT NOT NULL, FILE TEXT, FILENAME TEXT, CONTENT_TYPE TEXT, STAMP NUMERIC, ENC INTEGER, ENCRYPTION INTEGER, HASHING INTEGER, HASH TEXT, DECRYPTIONKEY TEXT, GROUPID TEXT)''')
+	cursor.execute('''CREATE TABLE IF NOT EXISTS profile(USERNAME TEXT UNIQUE PRIMARY KEY, FULLNAME TEXT, POSITION TEXT, DESCRIPTION TEXT, LOCATION TEXT, LASTUPDATED NUMERIC NOT NULL, PICTURE TEXT, ENC INTEGER, ENCRYPTION INTEGER, DECRYPTIONKEY TEXT )''')
         db.commit()
         db.close()
 
@@ -15,7 +15,7 @@ def initUserList(userList):
 	db = sqlite3.connect('db/clientData')
         cursor = db.cursor()
 	for user in userList:
-		cursor.execute(''' INSERT OR IGNORE INTO profile(username, fullname, position, description, location, lastupdated, picture, enc, encryption, decryptionKey) VALUES(?,?,?,?,?,?,?,?,?,?)''', [user, 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', "imgur.com/a/FrbMAY5", 0, 0, None])
+		cursor.execute(''' INSERT OR IGNORE INTO profile(username, fullname, position, description, location, lastupdated, picture, enc, encryption, decryptionKey) VALUES(?,?,?,?,?,?,?,?,?,?)''', [user, 'N/A', 'N/A', 'N/A', 'N/A', 0, "https://i.imgur.com/67aYReX.png", 0, 0, None])
 	db.commit()
         db.close()
 
@@ -27,7 +27,12 @@ def deleteOnline():
         db.close()
 
 def row2Dict(row):
-	return collections.OrderedDict(zip(row.keys(),row))
+	dict = collections.OrderedDict(zip(row.keys(),row))
+	if 'STAMP' in dict:
+	    dict['STAMP'] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(float(dict.get('STAMP'))))
+	elif 'LASTLOGIN' in dict:
+	    dict['LASTLOGIN'] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(float(dict.get('LASTLOGIN'))))
+	return dict
 
 def getUserAddress(username):
         db = sqlite3.connect('db/clientData')

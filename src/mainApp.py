@@ -51,16 +51,7 @@ class MainApp(object):
         cherrypy.response.status = 404
         return Page
 
-    @cherrypy.expose
-    @cherrypy.tools.json_out() 
-    def refresh(self):
-        #self.getList();
-	#authoriseUserLogin(cherrypy.session.get('username'), cherrypy.session.get('password'))
-	print("UPDATING")
-
-	#if active:
-	    #threading.Timer(30.0, self.refreshData())	
-	return {}
+   
  
     # PAGES (which return HTML that can be viewed in browser)
     @cherrypy.expose
@@ -130,8 +121,8 @@ class MainApp(object):
     @cherrypy.expose
     @cherrypy.tools.json_out() 
     def getFileJSON(self, username):
-	print(dbLib.getFile(username))
 	return dbLib.getFile(username)
+	
 
     @cherrypy.expose
     def sendFile(self, sender, destination, file1, ):
@@ -142,17 +133,15 @@ class MainApp(object):
 	filename = file1.filename
 	content_type = mimetypes.guess_type(filename)[0]
 	bin = file1.file.read()
-        stamp = str(time.time())
+        stamp = time.time()
 
 	key = ['sender', 'destination','file', 'filename', 'content_type', 'stamp', 'encoding', 'encryption', 'hashing', 'hash', 'decryptionKey', 'groupID' ]
-	param = [sender, destination, base64.b64encode(bin), filename, content_type, stamp, 0, 0, 0, None, None, None ]
+	param = [sender, destination, base64.b64encode(bin), filename, content_type, float(stamp), 0, 0, 0, None, None, None ]
 	data = collections.OrderedDict(zip(key,param))
         data = json.dumps(data)
 
         request = urllib2.Request(url,data, {'Content-Type': 'application/json'})
-        print(request)#remove later
         error = urllib2.urlopen(request, timeout = 15)
-        print(error.read())#remove later
 	
 	save_path = './static/userFiles'
 	nameFile = os.path.join(save_path, filename)         
@@ -179,7 +168,7 @@ class MainApp(object):
 	file.write(base64.b64decode(data.get('file')))
 	file.close()
 	
-	param = [data.get('sender'), data.get('destination'), save_path, data.get('filename'), data.get('content_type'), data.get('stamp'), data.get('encoding', 0), data.get('encryption', 0), data.get('hashing', 0), data.get('hash', None), data.get('decryptionKey', None), data.get('groupID', None)]
+	param = [data.get('sender'), data.get('destination'), save_path, data.get('filename'), data.get('content_type'), float(data.get('stamp')), data.get('encoding', 0), data.get('encryption', 0), data.get('hashing', 0), data.get('hash', None), data.get('decryptionKey', None), data.get('groupID', None)]
 	dbLib.insertFile(param)
 
 	return '0'
@@ -191,7 +180,7 @@ class MainApp(object):
 
         stamp = time.time()
 	key = ['sender', 'destination','message', 'stamp', 'encoding', 'encryption', 'hashing', 'hash', 'decryptionKey', 'groupID' ]
-	param = [sender, destination, message, stamp, encoding, encryption, hashing, hash, decryptionKey, groupID ]
+	param = [sender, destination, message, float(stamp), encoding, encryption, hashing, hash, decryptionKey, groupID ]
 	data = collections.OrderedDict(zip(key,param))
         data = json.dumps(data)
 
@@ -207,7 +196,7 @@ class MainApp(object):
     def receiveMessage(self):
         data = cherrypy.request.json
 
-        param = [data.get('sender'), data.get('destination'), data.get('message'), data.get('stamp'), data.get('encoding', 0), data.get('encryption', 0), data.get('hashing', 0), data.get('hash', None), data.get('decryptionKey', None), data.get('groupID', None)]
+        param = [data.get('sender'), data.get('destination'), data.get('message'), float(data.get('stamp')), data.get('encoding', 0), data.get('encryption', 0), data.get('hashing', 0), data.get('hash', None), data.get('decryptionKey', None), data.get('groupID', None)]
 
 	dbLib.insertMessage(param)
 	return '0'
@@ -221,7 +210,9 @@ class MainApp(object):
     @cherrypy.tools.json_out()
     def getProfileJS(self, profile_username):
 	self.updateProfile(profile_username)
-	return dbLib.getProfile(profile_username)
+	profile = dbLib.getProfile(profile_username)
+	profile['lastUpdated'] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(float(profile.get('lastUpdated'))))
+	return profile
 
     @cherrypy.expose
     @cherrypy.tools.json_in()
@@ -229,6 +220,7 @@ class MainApp(object):
     def getProfile(self):
 	data = cherrypy.request.json
 	return dbLib.getProfile(data['profile_username'])
+	
     
     @cherrypy.expose
     def profileEdit(self, profile_username, fullname, position, description, location, picture):
@@ -275,7 +267,7 @@ class MainApp(object):
 	string1 = urllib2.urlopen("http://cs302.pythonanywhere.com/listUsers").read()
 	userList = string1.split(',')
 	for user in userList:
-	    param = [user, "Not Online", None, "Not Online", 69, None]
+	    param = [user, "Not Online", None, 0, 69, None]
 	    dbLib.insertOnline(param)
         return '0' 
     
@@ -357,9 +349,13 @@ class MainApp(object):
         else:
             return 1
 
-
-    
-    #Monitor(cherrypy.engine, refreshData, frequency=300).subscribe()
+    @cherrypy.expose
+    @cherrypy.tools.json_out() 
+    def refresh(self):
+        self.getList();
+	self.authoriseUserLogin(cherrypy.session.get('username'), cherrypy.session.get('password'))
+	print("UPDATING")
+	return {}
     
     
           

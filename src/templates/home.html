@@ -65,14 +65,32 @@
         $.getJSON('/getSessionUserJSON', function(data) {
             setUpProfile(data.USERNAME);
         });
+
+	refresh();
     }
 </script>
 
 <script>
     function refresh() {
         $.getJSON('/refresh', function(data) {
-		 window.setTimeout(function() {refresh();}, 10000);
+		 window.setTimeout(function() {refresh();}, 60000);
         });
+   
+    }
+</script>
+
+<script>
+    function update() {
+	
+	window.setTimeout(function() {
+	    $.getJSON('/onlineJSON', function(data) {
+            var template = Handlebars.compile(myInfo);
+            var html = template(data);
+            $("#Users").append(html);});
+
+	    setUpProfile(window.name);
+	}, 20000);
+
    
     }
 </script>
@@ -102,7 +120,6 @@
         $.getJSON('/getProfileJS?profile_username=' + user, function(data) {
             var template = Handlebars.compile(myInfo);
             var html = template(data);
-
             $("#pDisp").html(html);
         });
 
@@ -115,7 +132,6 @@
         window.name = user;
         var x = window.name;
         profileDisp(x);
-	refresh();
 
     }
 </script>
