@@ -15,7 +15,7 @@
       <div class="NavBar">
          <img src="static/pepe.png">
          <h>Connecc</h>
-         <a href="/logout"     >Sign Out    </a>
+         <a href="/signout"     >Sign Out    </a>
          <a href="/editP"      >Edit Profile</a>
          <a href="/file"       >Files       </a>
          <a href="/messaging"  >Messenger   </a>
@@ -65,33 +65,6 @@
         $.getJSON('/getSessionUserJSON', function(data) {
             setUpProfile(data.USERNAME);
         });
-
-	refresh();
-    }
-</script>
-
-<script>
-    function refresh() {
-        $.getJSON('/refresh', function(data) {
-		 window.setTimeout(function() {refresh();}, 60000);
-        });
-   
-    }
-</script>
-
-<script>
-    function update() {
-	
-	window.setTimeout(function() {
-	    $.getJSON('/onlineJSON', function(data) {
-            var template = Handlebars.compile(myInfo);
-            var html = template(data);
-            $("#Users").append(html);});
-
-	    setUpProfile(window.name);
-	}, 20000);
-
-   
     }
 </script>
 

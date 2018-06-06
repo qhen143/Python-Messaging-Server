@@ -1,6 +1,8 @@
 import sqlite3
 import collections
 import time
+
+"""Creates the tables used in the database if not available"""
 def initTables():
 	db = sqlite3.connect('db/clientData')
         cursor = db.cursor()
@@ -11,6 +13,7 @@ def initTables():
         db.commit()
         db.close()
 
+"""Initilises the data in the profile table with placeholder data"""
 def initUserList(userList):
 	db = sqlite3.connect('db/clientData')
         cursor = db.cursor()
@@ -19,6 +22,7 @@ def initUserList(userList):
 	db.commit()
         db.close()
 
+"""Clears the online table"""
 def deleteOnline():
 	db = sqlite3.connect('db/clientData')
         cursor = db.cursor()
@@ -26,6 +30,7 @@ def deleteOnline():
         db.commit()
         db.close()
 
+"""Creates a dictionary from a row of data by formatting them with their respective key pair"""
 def row2Dict(row):
 	dict = collections.OrderedDict(zip(row.keys(),row))
 	if 'STAMP' in dict:
@@ -34,6 +39,7 @@ def row2Dict(row):
 	    dict['LASTLOGIN'] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(float(dict.get('LASTLOGIN'))))
 	return dict
 
+"""Gets the ip and port of the user in a url format"""
 def getUserAddress(username):
         db = sqlite3.connect('db/clientData')
         db.row_factory = sqlite3.Row
@@ -47,6 +53,7 @@ def getUserAddress(username):
         db.close()
 	return "http://"+ str(userData.get('IP',None)) +":"+ str(userData.get('PORT',None))
 
+"""Inserts a message into the database"""
 def insertMessage(parameters):
 	db = sqlite3.connect('db/clientData')
         cursor = db.cursor()
@@ -54,8 +61,8 @@ def insertMessage(parameters):
                  VALUES(?,?,?,?,?,?,?,?,?,?)''', parameters)
         db.commit()
         db.close()
-	print("saved msg")
 
+"""Insert file path and other information of a file"""
 def insertFile(parameters):
 	db = sqlite3.connect('db/clientData')
         cursor = db.cursor()
@@ -63,8 +70,8 @@ def insertFile(parameters):
                  VALUES(?,?,?,?,?,?,?,?,?,?,?,?)''', parameters)
         db.commit()
         db.close()
-	print("saved file")
 
+"""Get the file conversation stored in the database"""
 def getFile(username):
 	db = sqlite3.connect('db/clientData')
 	db.row_factory = sqlite3.Row
@@ -75,9 +82,9 @@ def getFile(username):
 		data.append(row2Dict(row))
         db.commit()
         db.close()
-	print("retreived file")
 	return data
 
+"""Get the msg conversation stored in the database"""
 def getMessages(username):
 	db = sqlite3.connect('db/clientData')
 	db.row_factory = sqlite3.Row
@@ -89,10 +96,10 @@ def getMessages(username):
 		data.append(row2Dict(row))
         db.commit()
         db.close()
-	print("retreived msg")
 	return data
 
 
+"""Inserts online users and their detail into a table"""
 def insertOnline(parameters):
 	db = sqlite3.connect('db/clientData')
 	db.row_factory = sqlite3.Row
@@ -103,6 +110,7 @@ def insertOnline(parameters):
         db.close()
 	print("saved Online")
 
+"""Gets the list of online users with their detail and offline users with dummy data"""
 def getOnline():
 	db = sqlite3.connect('db/clientData')
 	db.row_factory = sqlite3.Row
@@ -116,6 +124,7 @@ def getOnline():
 	print("retreived online")
 	return data
 
+"""Gets the profile of a person"""
 def getProfile(username):
 	db = sqlite3.connect('db/clientData')
 	db.row_factory = sqlite3.Row
@@ -129,6 +138,7 @@ def getProfile(username):
 	print("retreived profile")
 	return data
 
+"""Updates the profile of the session user"""
 def updateProfile(data,username):
 	db = sqlite3.connect('db/clientData')
         cursor = db.cursor()
@@ -140,6 +150,7 @@ def updateProfile(data,username):
         db.close()
 	print("Updated Profile")
 
+"""Gets the full lists of users/their profile"""
 def getAllUsers():
 	db = sqlite3.connect('db/clientData')
 	db.row_factory = sqlite3.Row

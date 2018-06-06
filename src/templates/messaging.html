@@ -19,7 +19,7 @@
       <div class="NavBar">
          <img src="static/pepe.png">
          <h>Connecc</h>
-         <a href="/logout"     >Sign Out    </a>
+         <a href="/signout"     >Sign Out    </a>
          <a href="/editP"      >Edit Profile</a>
          <a href="/file"       >Files       </a>
          <a class="active" href="/messaging"  >Messenger   </a>
@@ -44,7 +44,7 @@
 
 	<!--Default text goes here-------------------->
 	<div id="default"> 
-		 <img src="https://media1.tenor.com/images/db85ba00c6073b451a8f05156a66524e/tenor.gif?itemid=9856796"></img>
+		 
 	</div>
 </div>
 
@@ -56,6 +56,9 @@
     <div>
         <a href="javascript:void(0);" onclick="setUpMsg('{{USERNAME}}')">{{USERNAME}} </a>
 	<p10> {{ONLINE}}</p10>
+	{{#if ONLINE}}	
+	<p3> Location: {{LOCATION}}</p3>
+	{{/if}}
     </div>
     {{/each}}
 </script>
@@ -75,7 +78,6 @@
 
     }
 </script>
-
 
 
 <!--Setup message display-->
